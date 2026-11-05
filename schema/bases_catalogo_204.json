@@ -1,0 +1,1430 @@
+[
+  {
+    "@odata.etag": "W/\"2549287\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIBET",
+    "opsul_baseid": "0b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549303\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIÇAI",
+    "opsul_baseid": "1b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549291\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AICAMP",
+    "opsul_baseid": "0f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549294\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AICAR",
+    "opsul_baseid": "13684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549292\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIEMB",
+    "opsul_baseid": "10684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549490\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIJEQ",
+    "opsul_baseid": "df931013-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549290\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AILAN",
+    "opsul_baseid": "0e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549295\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AILIS",
+    "opsul_baseid": "14684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549293\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIMAB",
+    "opsul_baseid": "11684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549289\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIMAC",
+    "opsul_baseid": "0d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549297\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIMAP",
+    "opsul_baseid": "12684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549288\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIMIR",
+    "opsul_baseid": "0c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549296\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIPAF",
+    "opsul_baseid": "15684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549299\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIREM",
+    "opsul_baseid": "17684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549298\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIRIB",
+    "opsul_baseid": "16684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549301\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AIRIN",
+    "opsul_baseid": "19684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549300\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AISUAP",
+    "opsul_baseid": "18684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549302\"",
+    "opsul_categoria": "AI - Aeroporto / Aviação",
+    "opsul_ativo": true,
+    "opsul_sigla": "AITER",
+    "opsul_baseid": "1a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549304\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARBAL",
+    "opsul_baseid": "1c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549306\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARBRIO",
+    "opsul_baseid": "1e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549307\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARCAB",
+    "opsul_baseid": "1f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549305\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARCAP",
+    "opsul_baseid": "1d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549308\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARCAS",
+    "opsul_baseid": "20684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549309\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARCHAP",
+    "opsul_baseid": "21684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549312\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARFLO",
+    "opsul_baseid": "24684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549311\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARGOV",
+    "opsul_baseid": "23684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549310\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARGUAR",
+    "opsul_baseid": "25684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549313\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARJEQ",
+    "opsul_baseid": "26684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549314\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARJOI",
+    "opsul_baseid": "27684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549315\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARJOR",
+    "opsul_baseid": "28684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549317\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARJUR",
+    "opsul_baseid": "2a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549316\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARLAG",
+    "opsul_baseid": "29684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549318\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARLAN",
+    "opsul_baseid": "2b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549319\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARLEM",
+    "opsul_baseid": "2c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549320\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARMOC",
+    "opsul_baseid": "2d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549321\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARNIQ",
+    "opsul_baseid": "2e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549324\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARNOP",
+    "opsul_baseid": "31684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549322\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARORI",
+    "opsul_baseid": "2f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549325\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARREM",
+    "opsul_baseid": "32684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549323\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARRIG",
+    "opsul_baseid": "30684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549326\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARRIV",
+    "opsul_baseid": "33684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549327\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARRON",
+    "opsul_baseid": "34684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549328\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARSUL",
+    "opsul_baseid": "35684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549329\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARTAJ",
+    "opsul_baseid": "36684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549330\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARUBA",
+    "opsul_baseid": "38684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549331\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARUBA II",
+    "opsul_baseid": "37684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549332\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARUBE",
+    "opsul_baseid": "39684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549333\"",
+    "opsul_categoria": "AR - Armazém / Regional",
+    "opsul_ativo": true,
+    "opsul_sigla": "ARUNA",
+    "opsul_baseid": "3a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549334\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BABET/TEBET",
+    "opsul_baseid": "3b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549335\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BABRAS",
+    "opsul_baseid": "3c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549336\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BACAD",
+    "opsul_baseid": "3d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549378\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAÇAI",
+    "opsul_baseid": "66684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549337\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BACAJ",
+    "opsul_baseid": "3e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549338\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BACAM",
+    "opsul_baseid": "3f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549339\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BACRO",
+    "opsul_baseid": "40684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549341\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BACUB",
+    "opsul_baseid": "42684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549340\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BADEN",
+    "opsul_baseid": "41684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549342\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BADUC",
+    "opsul_baseid": "43684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549344\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAERI",
+    "opsul_baseid": "45684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549343\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAFOR",
+    "opsul_baseid": "44684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549345\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAGAM",
+    "opsul_baseid": "46684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549346\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAGUA",
+    "opsul_baseid": "47684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549349\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAIBA",
+    "opsul_baseid": "4a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549348\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAJUI",
+    "opsul_baseid": "49684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549347\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BALEM",
+    "opsul_baseid": "48684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549353\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BALIS",
+    "opsul_baseid": "4e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549352\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BALON",
+    "opsul_baseid": "4c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549350\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAMAB",
+    "opsul_baseid": "4b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549351\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAMAC",
+    "opsul_baseid": "4d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549354\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAMAN",
+    "opsul_baseid": "4f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549360\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAMAT",
+    "opsul_baseid": "52684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549355\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAMON",
+    "opsul_baseid": "50684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549356\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BANOAS",
+    "opsul_baseid": "51684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549357\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAPLAN",
+    "opsul_baseid": "53684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549359\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAPON",
+    "opsul_baseid": "55684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549358\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BARAC",
+    "opsul_baseid": "54684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549362\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BARIB",
+    "opsul_baseid": "56684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549361\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BARIX",
+    "opsul_baseid": "57684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549363\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BASEC",
+    "opsul_baseid": "58684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549364\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BASPA",
+    "opsul_baseid": "59684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549365\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BASULII",
+    "opsul_baseid": "5a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549368\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BATAL",
+    "opsul_baseid": "5c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549367\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BATAQ",
+    "opsul_baseid": "5b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549366\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAURU",
+    "opsul_baseid": "5d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549371\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAV1",
+    "opsul_baseid": "61684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549369\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAV2",
+    "opsul_baseid": "5e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549372\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAV3",
+    "opsul_baseid": "60684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549370\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAVAP",
+    "opsul_baseid": "5f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549373\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAVEL",
+    "opsul_baseid": "62684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549374\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAVIC",
+    "opsul_baseid": "63684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549375\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAVIT",
+    "opsul_baseid": "64684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549379\"",
+    "opsul_categoria": "BA - Base Operacional",
+    "opsul_ativo": true,
+    "opsul_sigla": "BAVOL",
+    "opsul_baseid": "67684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549380\"",
+    "opsul_categoria": "BE - Base Especial",
+    "opsul_ativo": true,
+    "opsul_sigla": "BEAPE",
+    "opsul_baseid": "69684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549376\"",
+    "opsul_categoria": "BE - Base Especial",
+    "opsul_ativo": true,
+    "opsul_sigla": "BEGON",
+    "opsul_baseid": "65684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549377\"",
+    "opsul_categoria": "BE - Base Especial",
+    "opsul_ativo": true,
+    "opsul_sigla": "BEJUA",
+    "opsul_baseid": "68684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549381\"",
+    "opsul_categoria": "BE - Base Especial",
+    "opsul_ativo": true,
+    "opsul_sigla": "BERAV",
+    "opsul_baseid": "6a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549387\"",
+    "opsul_categoria": "BE - Base Especial",
+    "opsul_ativo": true,
+    "opsul_sigla": "BETER",
+    "opsul_baseid": "6d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549382\"",
+    "opsul_categoria": "Corporativo / Outros",
+    "opsul_ativo": true,
+    "opsul_sigla": "CCPP",
+    "opsul_baseid": "6b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549383\"",
+    "opsul_categoria": "Corporativo / Outros",
+    "opsul_ativo": true,
+    "opsul_sigla": "CERAQ",
+    "opsul_baseid": "6c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549386\"",
+    "opsul_categoria": "DE - Depósito",
+    "opsul_ativo": true,
+    "opsul_sigla": "DEAÇU",
+    "opsul_baseid": "6e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549384\"",
+    "opsul_categoria": "DE - Depósito",
+    "opsul_ativo": true,
+    "opsul_sigla": "DECAE",
+    "opsul_baseid": "6f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549389\"",
+    "opsul_categoria": "DE - Depósito",
+    "opsul_ativo": true,
+    "opsul_sigla": "DEJAP",
+    "opsul_baseid": "72684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549388\"",
+    "opsul_categoria": "DE - Depósito",
+    "opsul_ativo": true,
+    "opsul_sigla": "DEMOR",
+    "opsul_baseid": "71684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549385\"",
+    "opsul_categoria": "DE - Depósito",
+    "opsul_ativo": true,
+    "opsul_sigla": "DERIO",
+    "opsul_baseid": "70684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549391\"",
+    "opsul_categoria": "DE - Depósito",
+    "opsul_ativo": true,
+    "opsul_sigla": "DEROD",
+    "opsul_baseid": "74684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549390\"",
+    "opsul_categoria": "Corporativo / Outros",
+    "opsul_ativo": true,
+    "opsul_sigla": "EPS",
+    "opsul_baseid": "73684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549392\"",
+    "opsul_categoria": "Corporativo / Outros",
+    "opsul_ativo": true,
+    "opsul_sigla": "GEI - Gerência Industrial",
+    "opsul_baseid": "75684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549393\"",
+    "opsul_categoria": "Corporativo / Outros",
+    "opsul_ativo": true,
+    "opsul_sigla": "GEOPAR",
+    "opsul_baseid": "76684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549394\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAALT",
+    "opsul_baseid": "77684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549395\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAARG",
+    "opsul_baseid": "78684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549396\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAARU",
+    "opsul_baseid": "79684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549398\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAAUS",
+    "opsul_baseid": "7b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549397\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RABAA",
+    "opsul_baseid": "7a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549399\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RABAU",
+    "opsul_baseid": "7c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549402\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RABEL",
+    "opsul_baseid": "7e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549400\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RABIO",
+    "opsul_baseid": "7d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549404\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RABOV",
+    "opsul_baseid": "82684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549401\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACAB",
+    "opsul_baseid": "7f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549403\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACAC",
+    "opsul_baseid": "80684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549406\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACAJ",
+    "opsul_baseid": "83684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549405\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACAN",
+    "opsul_baseid": "81684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549407\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACATI",
+    "opsul_baseid": "84684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549408\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACAX",
+    "opsul_baseid": "85684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549409\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACGH",
+    "opsul_baseid": "86684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549410\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACGR",
+    "opsul_baseid": "87684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549412\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACHI",
+    "opsul_baseid": "88684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549411\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACMP",
+    "opsul_baseid": "89684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549413\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACMT",
+    "opsul_baseid": "8a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549416\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACOR",
+    "opsul_baseid": "8d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549414\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACRI",
+    "opsul_baseid": "8b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549415\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACRU",
+    "opsul_baseid": "8c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549417\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACUR",
+    "opsul_baseid": "8e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549418\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RACWB",
+    "opsul_baseid": "8f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549419\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RADOU",
+    "opsul_baseid": "90684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549420\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAFLO",
+    "opsul_baseid": "91684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549421\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAFME",
+    "opsul_baseid": "92684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549424\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAFON",
+    "opsul_baseid": "93684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549426\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAFOR",
+    "opsul_baseid": "96684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549422\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAFOZ",
+    "opsul_baseid": "94684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549423\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAFPO",
+    "opsul_baseid": "95684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549427\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAGAR",
+    "opsul_baseid": "98684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549425\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAGOA",
+    "opsul_baseid": "97684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549428\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAGON",
+    "opsul_baseid": "99684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549435\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAGUA",
+    "opsul_baseid": "9e684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549431\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAGUR",
+    "opsul_baseid": "9b684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549429\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAITU",
+    "opsul_baseid": "9a684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549433\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAJAS",
+    "opsul_baseid": "a0684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549430\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAJER",
+    "opsul_baseid": "9d684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549432\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAJIP",
+    "opsul_baseid": "9c684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549434\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAJUA",
+    "opsul_baseid": "9f684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549436\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAJUF",
+    "opsul_baseid": "a1684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549440\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RALAG",
+    "opsul_baseid": "a5684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549438\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RALON",
+    "opsul_baseid": "a2684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549437\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMAB",
+    "opsul_baseid": "a3684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549439\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMAC",
+    "opsul_baseid": "a4684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549444\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMAN",
+    "opsul_baseid": "a6684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549442\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMAR",
+    "opsul_baseid": "a7684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549445\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMAT",
+    "opsul_baseid": "aa684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549441\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMCL",
+    "opsul_baseid": "a8684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549443\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMCP",
+    "opsul_baseid": "a9684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549446\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAMEA",
+    "opsul_baseid": "ab684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549448\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RANAT",
+    "opsul_baseid": "ad684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549447\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RANAV",
+    "opsul_baseid": "ac684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549452\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPAB",
+    "opsul_baseid": "b1684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549449\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPAL",
+    "opsul_baseid": "ae684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549450\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPEL",
+    "opsul_baseid": "af684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549451\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPLU",
+    "opsul_baseid": "b0684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549453\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPMG",
+    "opsul_baseid": "b3684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549454\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPNZ",
+    "opsul_baseid": "b2684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549455\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPRE",
+    "opsul_baseid": "b4684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549457\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPRU",
+    "opsul_baseid": "b6684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549456\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPSU",
+    "opsul_baseid": "b5684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549458\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPUC",
+    "opsul_baseid": "b8684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549459\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAPVH",
+    "opsul_baseid": "b9684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549461\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAQNS",
+    "opsul_baseid": "b7684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549460\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RARAL",
+    "opsul_baseid": "ba684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549465\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAREC",
+    "opsul_baseid": "bc684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549463\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RARIA",
+    "opsul_baseid": "be684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549464\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RARIB",
+    "opsul_baseid": "bb684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549462\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RARIP2",
+    "opsul_baseid": "bd684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549466\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASAN",
+    "opsul_baseid": "bf684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549467\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASCA",
+    "opsul_baseid": "c1684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549468\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASCR",
+    "opsul_baseid": "c0684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549469\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASDU",
+    "opsul_baseid": "c2684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549470\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASEG",
+    "opsul_baseid": "c4684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549472\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASEN",
+    "opsul_baseid": "c3684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549475\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASGA",
+    "opsul_baseid": "ca684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549471\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASIN",
+    "opsul_baseid": "c5684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549473\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASJO",
+    "opsul_baseid": "c6684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549477\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASLU",
+    "opsul_baseid": "c9684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549474\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RASPR",
+    "opsul_baseid": "c7684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549476\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RATAB",
+    "opsul_baseid": "c8684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549478\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RATEF",
+    "opsul_baseid": "ce684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549479\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RATER",
+    "opsul_baseid": "cf684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549481\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RATUBA",
+    "opsul_baseid": "d0684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549480\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAUBE",
+    "opsul_baseid": "d1684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549482\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAULA",
+    "opsul_baseid": "d2684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549483\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAURU",
+    "opsul_baseid": "d4684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549484\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAVAR",
+    "opsul_baseid": "d3684e05-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549486\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAVARI",
+    "opsul_baseid": "16074e0b-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549485\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAVIC",
+    "opsul_baseid": "17074e0b-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549487\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAVIL",
+    "opsul_baseid": "18074e0b-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549489\"",
+    "opsul_categoria": "RA - Revenda / Abastecimento",
+    "opsul_ativo": true,
+    "opsul_sigla": "RAVIT",
+    "opsul_baseid": "1a074e0b-47d9-f111-84e8-e4fade0322c2"
+  },
+  {
+    "@odata.etag": "W/\"2549488\"",
+    "opsul_categoria": "Corporativo / Outros",
+    "opsul_ativo": true,
+    "opsul_sigla": "SEDE",
+    "opsul_baseid": "19074e0b-47d9-f111-84e8-e4fade0322c2"
+  }
+]

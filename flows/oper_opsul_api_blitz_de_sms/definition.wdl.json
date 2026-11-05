@@ -1,0 +1,126 @@
+{
+  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "$connections": {
+      "defaultValue": {},
+      "type": "Object"
+    },
+    "$authentication": {
+      "defaultValue": {},
+      "type": "SecureObject"
+    }
+  },
+  "triggers": {
+    "manual": {
+      "type": "Request",
+      "kind": "Http",
+      "inputs": {
+        "triggerAuthenticationType": "All",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "data": {
+              "type": "string"
+            },
+            "base": {
+              "type": "string"
+            },
+            "responsavel_nome": {
+              "type": "string"
+            },
+            "transportadora": {
+              "type": "string"
+            },
+            "placa_ct": {
+              "type": "string"
+            },
+            "cif_fob": {
+              "type": "string"
+            },
+            "item01_epis_ok": {
+              "type": "boolean"
+            },
+            "qual_epi_inapropriado": {
+              "type": "string"
+            },
+            "obs_item1": {
+              "type": "string"
+            },
+            "item02_veiculo_ok": {
+              "type": "boolean"
+            },
+            "qual_peca_nao_conforme": {
+              "type": "string"
+            },
+            "obs_item2": {
+              "type": "string"
+            },
+            "item03_tanque_ok": {
+              "type": "boolean"
+            },
+            "obs_item3": {
+              "type": "string"
+            },
+            "item04_aterramento_ok": {
+              "type": "boolean"
+            },
+            "obs_item4": {
+              "type": "string"
+            },
+            "item05_chave_geral_ok": {
+              "type": "boolean"
+            },
+            "obs_item5": {
+              "type": "string"
+            },
+            "motorista_bloqueado": {
+              "type": "string"
+            },
+            "observacao_geral": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "actions": {
+    "Compose_Protocolo": {
+      "type": "Compose",
+      "inputs": "@concat('BLITZ-', coalesce(triggerBody()?['base'], 'OPSUL'), '-', toUpper(substring(guid(), 0, 8)))",
+      "runAfter": {}
+    },
+    "Response_OK": {
+      "type": "Response",
+      "kind": "Http",
+      "inputs": {
+        "statusCode": 200,
+        "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "body": {
+          "ok": true,
+          "protocolo": "@{outputs('Compose_Protocolo')}",
+          "base": "@{triggerBody()?['base']}",
+          "responsavel_nome": "@{triggerBody()?['responsavel_nome']}",
+          "placa_ct": "@{triggerBody()?['placa_ct']}",
+          "motorista_bloqueado": "@{triggerBody()?['motorista_bloqueado']}",
+          "solution": "OPER_OPSUL"
+        }
+      },
+      "runAfter": {
+        "Compose_Protocolo": [
+          "Succeeded"
+        ]
+      }
+    }
+  },
+  "outputs": {}
+}

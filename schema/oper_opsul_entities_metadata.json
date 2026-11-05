@@ -1,0 +1,52 @@
+{
+  "solution": {
+    "uniquename": "OPER_OPSUL",
+    "friendlyname": "OPER_OPSUL",
+    "solutionid": "e11a7dcc-45d9-f111-84e8-e4fade0322c2",
+    "version": "1.0.0.0",
+    "publisher": {
+      "uniquename": "oper_opsul_publisher",
+      "customizationprefix": "opsul",
+      "publisherid": "dd1a7dcc-45d9-f111-84e8-e4fade0322c2"
+    }
+  },
+  "environment": {
+    "name": "Cristian Ferreira Carlos",
+    "environmentId": "4a9ba077-4920-ea16-ae45-293f56eb85e3",
+    "dataverseUrl": "https://orgd15f46d4.crm2.dynamics.com"
+  },
+  "tables": [
+    {
+      "logicalName": "opsul_base",
+      "entitySetName": "opsul_bases",
+      "displayName": "Base Operacional OPSUL",
+      "recordsCount": 204,
+      "primaryNameAttribute": "opsul_sigla"
+    },
+    {
+      "logicalName": "opsul_responsavel",
+      "entitySetName": "opsul_responsavels",
+      "displayName": "Responsável pela Blitz",
+      "recordsCount": 372,
+      "primaryNameAttribute": "opsul_nome"
+    },
+    {
+      "logicalName": "opsul_usuarioregional",
+      "entitySetName": "opsul_usuarioregionals",
+      "displayName": "Usuário Regional OPSUL",
+      "recordsCount": 2,
+      "primaryNameAttribute": "opsul_nome"
+    },
+    {
+      "logicalName": "opsul_blitzsms",
+      "entitySetName": "opsul_blitzsmses",
+      "displayName": "Blitz de SMS",
+      "recordsCount": 3761,
+      "primaryNameAttribute": "opsul_titulo",
+      "relationships": [
+        "opsul_base_opsul_blitzsms (opsul_baseid -> opsul_base)",
+        "opsul_responsavel_opsul_blitzsms (opsul_responsavelid -> opsul_responsavel)"
+      ]
+    }
+  ]
+}

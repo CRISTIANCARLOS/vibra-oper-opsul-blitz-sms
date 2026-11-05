@@ -1,0 +1,28 @@
+[
+  {
+    "@odata.etag": "W/\"2549284\"",
+    "opsul_perfil": "Gestor Regional OPSUL",
+    "opsul_email": "wedson@vibraenergia.com.br",
+    "opsul_entra_oid": "19f80cc5-873f-4aa3-afea-46e92de2bfa2",
+    "opsul_ativo": true,
+    "opsul_cargo": "Empregado",
+    "opsul_nome": "Wedson Pereira da Silva",
+    "opsul_departamento": "Operação Regional Sul e Sudeste",
+    "opsul_regional": "OPSUL - Sul e Sudeste",
+    "opsul_usuarioregionalid": "09684e05-47d9-f111-84e8-e4fade0322c2",
+    "opsul_sso_habilitado": true
+  },
+  {
+    "@odata.etag": "W/\"2549286\"",
+    "opsul_perfil": "Gestora Regional OPSUL",
+    "opsul_email": "anasales@vibraenergia.com.br",
+    "opsul_entra_oid": "a57b45d7-0126-4f0a-8c45-f3a65e7161d7",
+    "opsul_ativo": true,
+    "opsul_cargo": "Empregada",
+    "opsul_nome": "Ana Claudia Camargos Sales",
+    "opsul_departamento": "Operação Regional Sul e Sudeste",
+    "opsul_regional": "OPSUL - Sul e Sudeste",
+    "opsul_usuarioregionalid": "0a684e05-47d9-f111-84e8-e4fade0322c2",
+    "opsul_sso_habilitado": true
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "shared_office365": {
+    "runtimeSource": "embedded",
+    "connection": {
+      "name": "shared-office365-ae3adf4f"
+    },
+    "api": {
+      "name": "shared_office365"
+    }
+  }
+}
