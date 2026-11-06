@@ -7,33 +7,37 @@
 - **Solução Dataverse:** `OPER_OPSUL` (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`)
 - **Publisher:** `OPER_OPSUL Vibra Energia` (prefixo `opsul_`)
 - **Link Oficial do App (Exige Login Corporativo Vibra SSO):** [Abrir Aplicativo Blitz de SMS — OPER_OPSUL (SSO Vibra)](https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html)
-- **Link de Redirecionamento Automático (`HTTP 302 -> SSO Vibra`):** [Redirecionador Portal OPER_OPSUL](https://4a9ba0774920ea16ae45293f56eb85.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/22bf8a38645945cea776aadeb945e1e9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lX9gzbxvImHj0A29PSf5YqK96YoU56w9VuQSGBCsEQo)
+- **Link de Redirecionamento Automático (`Portal Flow -> SSO Vibra`):** [Redirecionador Portal OPER_OPSUL](https://4a9ba0774920ea16ae45293f56eb85.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/22bf8a38645945cea776aadeb945e1e9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lX9gzbxvImHj0A29PSf5YqK96YoU56w9VuQSGBCsEQo)
 
 ---
 
-## 1. Arquitetura da Solução `OPER_OPSUL`
+## 1. Arquitetura da Solução `OPER_OPSUL` (`v1.3.0`)
 
 ```mermaid
 flowchart LR
-    subgraph Frontend["📱 Camada de Apresentação (Zero Login)"]
-        APP["Portal Web Blitz de SMS
+    subgraph Frontend["📱 Camada de Apresentação (Login Vibra SSO + Tablet Compartilhado)"]
+        SSO["Login Corporativo Vibra SSO
+(/api/data/v9.2/WhoAmI)"]
+        APP["Web Resource Blitz de SMS
 (Design Vibra #004415 / #268200 / #FEDC00)"]
         FZ["Busca Fuzzy de Base
 (204 Siglas Operacionais)"]
-        RESP_MEM["Memória de Responsável
-(Escreve 1x → Escolhe na Lista)"]
+        RESP_MEM["Seletor de Responsável
+(372 Nomes / Suporte a Tablet Compartilhado)"]
+        FOTO["Evidência Fotográfica Opcional
+(Compressão Canvas JPEG 1280px)"]
     end
 
-    subgraph PA["⚙️ Power Automate (Triggers HTTP All / Anônimos)"]
+    subgraph PA["⚙️ Power Automate (Solution Flows)"]
         F_PORTAL["OPER_OPSUL - Portal Web Blitz de SMS
-(GET HTML5 App)"]
+(Redirecionador para SSO Vibra)"]
         F_API["OPER_OPSUL - API Blitz de SMS
-(POST Submissão JSON)"]
+(CreateRecord + Upload Fotos Binárias)"]
     end
 
-    subgraph DV["🗄️ Solução Relacional OPER_OPSUL (Dataverse SQL)"]
+    subgraph DV["🗄️ Solução Relacional OPER_OPSUL (Dataverse SQL + Blob Storage)"]
         T_BLITZ[("opsul_blitzsms
-3.761 Registros")]
+3.761 Registros + 5 Colunas ImageType")]
         T_BASE[("opsul_base
 204 Bases")]
         T_RESP[("opsul_responsavel
@@ -44,11 +48,14 @@ flowchart LR
         T_RESP -->|"1:N (opsul_responsavelid)"| T_BLITZ
     end
 
-    APP --> F_PORTAL
+    F_PORTAL -->|"Redireciona"| SSO
+    SSO --> APP
     APP --> F_API
     F_API --> T_BLITZ
     F_API --> T_RESP
 ```
+
+> **Operação em Tablets Compartilhados nas Bases:** O aplicativo exige que o dispositivo esteja autenticado no ambiente corporativo da Vibra Energia (`@vibraenergia.com.br` via SSO no Dataverse), registrando a conta autenticada do aparelho em `opsul_responsavel_email`, enquanto mantém o seletor **Responsável pela Blitz** aberto (`opsul_responsavel_nome`) para que múltiplos inspetores/operadores que compartilham o mesmo tablet em campo selecionem seu próprio nome a cada Blitz.
 
 ---
 
@@ -58,7 +65,7 @@ flowchart LR
 | :--- | :--- | :---: | :--- | :--- |
 | **`opsul_blitzsms`** | `opsul_blitzsmses` | **3.761** | Tabela fato principal de inspeções Blitz de SMS (25 atributos + 5 colunas `ImageType` 10 MB para fotos de NC + 2 lookups 1:N) | [`schema/oper_opsul_entities_metadata.json`](./schema/oper_opsul_entities_metadata.json) |
 | **`opsul_base`** | `opsul_bases` | **204** | Dimensão de Bases Operacionais (`BA`, `RA`, `AR`, `AI`, `DE`, `BE`, `SEDE`, `GEI`, `CCPP`, `EPS`) | [`schema/bases_catalogo_204.json`](./schema/bases_catalogo_204.json) |
-| **`opsul_responsavel`** | `opsul_responsavels` | **372** | Dimensão de Responsáveis pela Blitz (*escreve o nome 1x e depois escolhe na lista*) | [`schema/oper_opsul_entities_metadata.json`](./schema/oper_opsul_entities_metadata.json) |
+| **`opsul_responsavel`** | `opsul_responsavels` | **372** | Dimensão de Responsáveis pela Blitz (*escreve o nome 1x e depois escolhe na lista*, ideal para tablets compartilhados) | [`schema/oper_opsul_entities_metadata.json`](./schema/oper_opsul_entities_metadata.json) |
 | **`opsul_usuarioregional`** | `opsul_usuarioregionals` | **2** | Usuários do Regional OPSUL (`wedson@vibraenergia.com.br` e `anasales@vibraenergia.com.br`) preparados para login SSO em solução futura | [`schema/usuarios_regionais_sso.json`](./schema/usuarios_regionais_sso.json) |
 
 ---
@@ -67,9 +74,9 @@ flowchart LR
 
 | Componente | Tipo | ID no Dataverse | Autenticação | Código-Fonte |
 | :--- | :--- | :--- | :---: | :--- |
-| **OPER_OPSUL - Portal Web Blitz de SMS (Sem Login)** | Solution Cloud Flow | `8bfaac34-48d9-f111-84e8-e4fade0322c2` | `All` (Anônimo / Zero Login) | [`flows/oper_opsul_portal_web_blitz_de_sms/`](./flows/oper_opsul_portal_web_blitz_de_sms/README.md) |
-| **OPER_OPSUL - API Blitz de SMS (Sem Login)** | Solution Cloud Flow | `592191f7-47d9-f111-84e8-e4fade0322c2` | `All` (Anônimo / Zero Login) | [`flows/oper_opsul_api_blitz_de_sms/`](./flows/oper_opsul_api_blitz_de_sms/README.md) |
-| **`opsul_blitz_sms_app.html`** | Dataverse Web Resource (HTML) | `246bf32a-48d9-f111-84e8-e4fade0322c2` | Web Resource / Power Pages | [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html) |
+| **`opsul_blitz_sms_app.html`** | Dataverse Web Resource (HTML) | `246bf32a-48d9-f111-84e8-e4fade0322c2` | **SSO Microsoft Entra ID Vibra** (`/api/data/v9.2/WhoAmI`) | [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html) |
+| **OPER_OPSUL - Portal Web Blitz de SMS** | Solution Cloud Flow | `8bfaac34-48d9-f111-84e8-e4fade0322c2` | Redirecionador automático para o Web Resource SSO | [`flows/oper_opsul_portal_web_blitz_de_sms/`](./flows/oper_opsul_portal_web_blitz_de_sms/README.md) |
+| **OPER_OPSUL - API Blitz de SMS** | Solution Cloud Flow | `592191f7-47d9-f111-84e8-e4fade0322c2` | Endpoint POST (`CreateRecord` + `UpdateEntityFileImageFieldContent`) | [`flows/oper_opsul_api_blitz_de_sms/`](./flows/oper_opsul_api_blitz_de_sms/README.md) |
 
 ---
 

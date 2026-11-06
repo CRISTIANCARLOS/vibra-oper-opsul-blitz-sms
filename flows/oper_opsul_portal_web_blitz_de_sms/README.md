@@ -1,13 +1,13 @@
-# ⚙️ Fluxo: `OPER_OPSUL - Portal Web Blitz de SMS (Sem Login)`
+# ⚙️ Fluxo: `OPER_OPSUL - Portal Web Blitz de SMS (Redirecionador SSO Vibra)`
 
 - **Workflow ID (Dataverse):** `8bfaac34-48d9-f111-84e8-e4fade0322c2`
 - **Solução:** `OPER_OPSUL` (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`)
 - **Ambiente:** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3`)
 - **Estado:** `Ativo (Started)` (`statecode: 1, statuscode: 2`)
-- **Autenticação do Trigger:** `All` (**Acesso Anônimo / Sem Login**)
+- **Destino SSO:** `https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html`
 
 ## Descrição
-Fluxo HTTP GET anônimo (triggerAuthenticationType=All) que entrega o aplicativo completo Blitz de SMS sem exigir login.
+Fluxo HTTP GET que intercepta acessos ao link antigo do Portal e redireciona automaticamente (`window.location.replace` + `meta http-equiv="refresh"`) para o Web Resource autenticado no Microsoft Dataverse (`https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html`), exigindo login corporativo no ambiente Vibra Energia (Microsoft Entra ID SSO).
 
 ## Fluxograma WDL
 ```mermaid

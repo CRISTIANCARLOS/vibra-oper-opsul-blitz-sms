@@ -4,7 +4,7 @@
 **Publisher:** `OPER_OPSUL Vibra Energia` (`oper_opsul_publisher`, prefixo `opsul_`)  
 **Ambiente Power Platform:** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3`)  
 **Organização Dataverse:** `https://orgd15f46d4.crm2.dynamics.com`  
-**Versão:** `v1.0.0` (`2026-11-05`)
+**Versão:** `v1.3.0` (`2026-11-06`)
 
 ---
 
@@ -43,7 +43,8 @@ erDiagram
         int opsul_sp_id "ID Original SharePoint"
         date opsul_data "Data da Blitz (Obrigatório)"
         string opsul_base "Sigla da Base (Obrigatório)"
-        string opsul_responsavel_nome "Nome do Responsável (Obrigatório)"
+        string opsul_responsavel_nome "Nome do Responsável em Campo (Obrigatório)"
+        string opsul_responsavel_email "E-mail da Sessão SSO Autenticada"
         string opsul_transportadora "Transportadora (Obrigatório)"
         string opsul_placa_ct "Placa do CT (Obrigatório)"
         string opsul_cif_fob "CIF ou FOB (Obrigatório)"
@@ -83,13 +84,13 @@ Tabela criada para armazenar os usuários da Regional OPSUL que farão login via
 ### 2.2. `opsul_base` (`opsul_bases`) — Catálogo de Bases Operacionais (204 siglas)
 Contém todas as siglas operacionais deduplicadas (`AIBET`, `AIÇAI`, `AICAMP`, `BACUB`, `BAERI`, `BAVAP`, `RACWB`, `GEI - Gerência Industrial`, `SEDE`, etc.) classificadas automaticamente por tipo operacional.
 
-### 2.3. `opsul_responsavel` (`opsul_responsavels`) — Catálogo de Responsáveis pela Blitz (372 registros)
-Implementa a regra **"escreve o nome uma vez, depois escolhe na lista"**:
-- Todos os 372 nomes históricos foram higienizados e carregados.
-- Quando um inspetor acessa o formulário pela primeira vez e digita seu nome, o aplicativo adiciona o nome imediatamente à lista suspensa e o persiste para as próximas inspeções, além de pré-selecionar a base padrão do usuário.
+### 2.3. `opsul_responsavel` (`opsul_responsavels`) — Catálogo de Responsáveis pela Blitz (372 registros) & Operação em Tablets Compartilhados
+Implementa a regra **"escreve o nome uma vez, depois escolhe na lista"**, combinada com **Login Corporativo Vibra SSO**:
+- **Autenticação do Dispositivo (`opsul_responsavel_email`):** O acesso ao aplicativo (`https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html`) exige uma sessão corporativa ativa no ambiente Vibra Energia (`@vibraenergia.com.br`), validada em tempo real via `/api/data/v9.2/WhoAmI`.
+- **Uso Compartilhado em Base (`opsul_responsavel_nome`):** Em bases onde um único tablet corporativo é compartilhado por dezenas de operadores (ex.: o gerente/supervisor autentica sua conta Vibra no aparelho e ~40 pessoas realizam inspeções ao longo dos turnos), o seletor **Responsável pela Blitz** permanece editável para que cada inspetor selecione seu próprio nome na lista de 372 responsáveis (ou cadastre seu nome uma única vez).
 
 ### 2.4. `opsul_blitzsms` (`opsul_blitzsmses`) — Tabela Fato de Inspeções Blitz de SMS (3.761 registros)
-Mapeia integralmente todas as colunas e dados históricos da lista SharePoint `Blitz de SMS` (`4d397d74-e478-446a-a6ba-69e9d4bcf094`), preservando o `ID` original em `opsul_sp_id` e vinculando os lookups relacionais `opsul_baseid` e `opsul_responsavelid`.
+Mapeia integralmente todas as colunas e dados históricos da lista SharePoint `Blitz de SMS` (`4d397d74-e478-446a-a6ba-69e9d4bcf094`), preservando o `ID` original em `opsul_sp_id`, vinculando os lookups relacionais `opsul_baseid` e `opsul_responsavelid` e armazenando até **5 fotos opcionais de evidência de não conformidade** (`opsul_foto_item1` a `opsul_foto_item5`, tipo nativo `ImageAttributeMetadata` com até `10 MB` cada no Azure Blob Storage gerenciado pelo Dataverse).
 
 ---
 
