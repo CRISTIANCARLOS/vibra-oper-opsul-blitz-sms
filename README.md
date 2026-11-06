@@ -67,6 +67,8 @@ flowchart LR
 
 > **Responsável Vinculado ao Login Corporativo Individual (100% Compatível com o Banco Atual):** Cada usuário faz a Blitz autenticado em seu próprio login corporativo da Vibra Energia (`@vibraenergia.com.br` via SSO no Dataverse). O campo **Nome do Responsável pela Blitz** é bloqueado (`readonly`) e preenchido automaticamente a partir da sessão autenticada (`WhoAmI` + `systemusers`), cruzando com o catálogo de 372 nomes de `opsul_responsavel` quando existente e enviando os mesmos atributos `opsul_responsavel_nome` e `opsul_responsavel_email` para `opsul_blitzsms` sem qualquer alteração no banco de dados atual.
 >
+> **Busca Inteligente Fuzzy de Transportadora (Unificação de Variações para o Dashboard Power BI):** O campo **Transportadora** utiliza um Combobox inteligente com motor **Fuzzy (Distância de Levenshtein + remoção de sufixos societários `LTDA`, `SA`, `TRANSPORTADORA`, `TRANSPORTES`)** sobre o catálogo de **383 transportadoras canônicas** unificadas a partir de 1.367 variações históricas (ex.: `TRANSPORTADORA NICHELE LTDA` -> **`NICHELE`**, `ADEMIR TRANSPORTES` -> **`ADEMIR`**, `DALCOQUIO` -> **`DALÇOQUIO`**), mantendo o Dashboard Power BI (`Power Bi - Blitz SMS`) 100% íntegro e sem fragmentação de nomes.
+>
 > **Alerta Automático de Desvios no Teams (`BAERI`):** Sempre que uma Blitz na **`BAERI`** (`opsul_alerta_teams_ativo = true`) registrar **1 ou mais desvios** no checklist (Itens 01 a 05), um card informativo (**sem botões de ação**) é publicado automaticamente no grupo **`Blitz SSMA BAERI`** do Microsoft Teams.
 
 ---

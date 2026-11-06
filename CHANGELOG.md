@@ -1,5 +1,13 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.6.0] — 2026-11-06
+### Adicionado & Alterado
+- **Busca Inteligente Fuzzy de Transportadora + Unificação de Variações para o Dashboard (`Power Bi - Blitz SMS`):**
+  - Substituição do `<datalist>` simples pelo Combobox inteligente `#transpComboWrapper` (`#inpTranspSearch`, `#inpTransportadora`, `#transpDropdown`) no formulário [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html).
+  - **Catálogo Unificado de 383 Transportadoras Canônicas (a partir de 1.367 grafias brutas das 3.761 Blitz históricas):** A função `clean_transp_key()` remove ruídos societários/genéricos (`TRANSPORTADORA`, `TRANSPORTES`, `RODOVIARIO`, `LOGISTICA`, `LTDA`, `SA`, `EIRELI`, `ME`, `EPP`) e agrupa variações históricas sob a grafia canônica mais frequente no banco (ex.: `ADEMIR TRANSPORTES` / `ADEMIR TRANSPORTE` -> **`ADEMIR`**; `TRANSPORTADORA NICHELE LTDA` / `NICHELE LTDA` -> **`NICHELE`**; `BUDEL TRANSPORTES LTDA` -> **`BUDEL`**; `DALCOQUIO` -> **`DALÇOQUIO`**).
+  - **Motor de Busca Fuzzy Multi-Critério (`transpFuzzyScore`):** Combina correspondência exata, prefixo de nome/núcleo, substring, aliases históricos, subsequência e **Distância de Levenshtein** por token (tolerante a erros de digitação e falta de acentuação), além de permitir o cadastro em 1 clique de novas transportadoras (`+ Cadastrar nova transportadora: "..."`).
+  - **Compatibilidade 100% preservada com o Dashboard e Banco Relacional (`opsul_blitzsms`):** Nenhuma coluna ou tabela foi alterada; a coluna `opsul_transportadora` passa a receber nomes padronizados, evitando a fragmentação de barras e indicadores por transportadora no Power BI.
+
 ## [v1.5.0] — 2026-11-06
 ### Alterado
 - **Bloqueio de Seleção Manual de Terceiros — Responsável Vinculado Exclusivamente ao Login Corporativo Vibra SSO (100% Compatível com o Banco Atual):**

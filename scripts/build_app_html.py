@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import unicodedata
 
 SCRATCH_DIR = r"C:\Users\CE9X\.gemini\antigravity-cli\brain\8cae6e32-993e-4789-bd1b-881b43fbd9e1\scratch"
 
@@ -255,6 +256,20 @@ def normalize_name(name):
         n = " ".join([p.lower() if i > 0 and p in lower_words else p for i, p in enumerate(parts)])
     return n
 
+def strip_acc(s):
+    return "".join(c for c in unicodedata.normalize("NFD", str(s or "")) if unicodedata.category(c) != "Mn")
+
+def clean_transp_key(raw):
+    s = strip_acc(raw.upper().strip())
+    s = re.sub(r"[^A-Z0-9\s]", " ", s)
+    s = re.sub(
+        r"\b(TRANSPORTADORA|TRANSPORTES|TRANSPORTE|RODOVIARIO|RODOVIARIA|LOGISTICA|COMERCIO|DE|COMBUSTIVEIS|DERIVADOS|PETROLEO|LTDA|S\s*A|SA|ME|EPP|EIRELI|CIA|E)\b",
+        " ",
+        s
+    )
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
 def main():
     items_path = os.path.join(SCRATCH_DIR, "blitz_all_items.json")
     with open(items_path, "r", encoding="utf-8-sig") as f:
@@ -271,9 +286,9 @@ def main():
             base_set.add(it["Base"]["Value"].strip())
     bases = sorted(base_set)
 
-    # 2. Extract Responsáveis sorted by frequency/alphabetical
+    # 2. Extract Responsáveis & Grouped Transportadoras (Fuzzy Catalog)
     resp_map = {}
-    transp_counts = {}
+    transp_groups = {}
     for it in sp_items:
         raw_name = it.get("Nomedorespons_x00e1_velpelaBlitz")
         resp_obj = it.get("Respons_x00e1_velpelaBlitz")
@@ -294,11 +309,28 @@ def main():
 
         tr = (it.get("Transportadora") or "").strip()
         if tr and len(tr) >= 2:
-            tk = tr.upper()
-            transp_counts[tk] = transp_counts.get(tk, 0) + 1
+            u = re.sub(r"\s+", " ", tr.upper().strip(" -.,;/"))
+            if u not in ("FOB", "CIF", "NAO INFORMADO", "N/A", "NA", "N/I", "NI", "0", "00", "XXX", "TESTE"):
+                tk = clean_transp_key(u)
+                if not tk or len(tk) < 2:
+                    tk = u
+                if tk not in transp_groups:
+                    transp_groups[tk] = {"total": 0, "variants": {}}
+                transp_groups[tk]["total"] += 1
+                transp_groups[tk]["variants"][u] = transp_groups[tk]["variants"].get(u, 0) + 1
 
     responsaveis = sorted(resp_map.values(), key=lambda x: (-x["count"], x["nome"]))
-    top_transp = [k.title() for k, _ in sorted(transp_counts.items(), key=lambda x: -x[1])[:60]]
+    top_transp = []
+    for tk, info in sorted(transp_groups.items(), key=lambda x: -x[1]["total"]):
+        if info["total"] < 2 and len(top_transp) >= 250:
+            continue
+        best_var = sorted(info["variants"].items(), key=lambda x: (-x[1], len(x[0])))[0][0]
+        aliases = [v for v, _ in sorted(info["variants"].items(), key=lambda x: -x[1]) if v != best_var][:4]
+        top_transp.append({
+            "nome": best_var,
+            "count": info["total"],
+            "aliases": aliases
+        })
 
     bases_json = json.dumps(bases, ensure_ascii=False)
     resp_json = json.dumps(responsaveis, ensure_ascii=False)
@@ -1375,21 +1407,32 @@ def main():
               <span class="error-msg" id="errCifFob">Selecione CIF ou FOB.</span>
             </div>
 
-            <!-- TRANSPORTADORA -->
+            <!-- TRANSPORTADORA COM BUSCA INTELIGENTE FUZZY -->
             <div class="field-group col-6">
               <div class="field-label-row">
-                <label class="field-label" for="inpTransportadora">Transportadora</label>
+                <label class="field-label" for="inpTranspSearch">Transportadora (Busca Inteligente Fuzzy)</label>
                 <span class="badge-req">OBRIGATÓRIO</span>
               </div>
-              <input
-                type="text"
-                id="inpTransportadora"
-                list="transportadorasDatalist"
-                placeholder="Digite ou selecione a Transportadora..."
-                required
-              />
-              <datalist id="transportadorasDatalist"></datalist>
-              <span class="error-msg" id="errTransportadora">Informe o nome da Transportadora.</span>
+              <div class="combobox-wrapper" id="transpComboWrapper">
+                <div class="combobox-input-box">
+                  <input
+                    type="text"
+                    id="inpTranspSearch"
+                    placeholder="Digite ou busque (ex.: NICHELE, ADEMIR, TRANSPODIESEL, ARCO)..."
+                    autocomplete="off"
+                  />
+                  <div class="combobox-actions">
+                    <button type="button" class="combo-btn" id="btnClearTransp" title="Limpar Transportadora" style="display:none;">✕</button>
+                    <button type="button" class="combo-btn" id="btnToggleTranspDropdown">▼ Lista ({len(top_transp)})</button>
+                  </div>
+                </div>
+                <input type="hidden" id="inpTransportadora" required />
+                <div class="fuzzy-dropdown" id="transpDropdown">
+                  <div id="transpResultsList"></div>
+                </div>
+              </div>
+              <span class="field-hint">Busca Fuzzy que unifica variações e corrige digitação (ex.: <strong>nicheli</strong> ou <strong>transp nichele</strong> → <strong>NICHELE</strong>).</span>
+              <span class="error-msg" id="errTransportadora">Selecione ou informe o nome da Transportadora.</span>
             </div>
 
             <!-- PLACA DO CT -->
@@ -1783,6 +1826,7 @@ def main():
     // Estado do Formulário
     let basesList = [...INITIAL_BASES];
     let responsaveisList = [...INITIAL_RESPONSAVEIS];
+    let transportadorasList = [...INITIAL_TRANSPORTADORAS];
     let activeBaseCat = "ALL";
     let itemState = {{ 1: true, 2: true, 3: true, 4: true, 5: true }};
     let itemPhotos = {{ 1: null, 2: null, 3: null, 4: null, 5: null }};
@@ -2028,7 +2072,171 @@ def main():
       }}
     }}
 
-    // Fechar dropdown de Base ao clicar fora
+    // === COMBOBOX DE TRANSPORTADORA (BUSCA INTELIGENTE FUZZY + UNIFICAÇÃO DE VARIAÇÕES) ===
+    const inpTranspSearch = document.getElementById("inpTranspSearch");
+    const inpTransportadora = document.getElementById("inpTransportadora");
+    const transpDropdown = document.getElementById("transpDropdown");
+    const transpResultsList = document.getElementById("transpResultsList");
+    const btnClearTransp = document.getElementById("btnClearTransp");
+
+    function cleanTranspQuery(q) {{
+      return stripAccents(q)
+        .replace(/[^A-Z0-9\\s]/g, " ")
+        .replace(/\\b(TRANSPORTADORA|TRANSPORTES|TRANSPORTE|RODOVIARIO|RODOVIARIA|LOGISTICA|LTDA|SA|ME|EPP|EIRELI)\\b/g, " ")
+        .replace(/\\s+/g, " ")
+        .trim();
+    }}
+
+    function transpFuzzyScore(query, item) {{
+      if (!query || !query.trim()) return 100;
+      const rawSc = fuzzyScore(query, item.nome);
+      const coreQ = cleanTranspQuery(query);
+      const coreT = cleanTranspQuery(item.nome);
+      const coreSc = coreQ ? fuzzyScore(coreQ, coreT || item.nome) : 0;
+      let best = Math.max(rawSc, coreSc);
+      if (Array.isArray(item.aliases)) {{
+        for (const al of item.aliases) {{
+          best = Math.max(best, fuzzyScore(query, al), coreQ ? fuzzyScore(coreQ, cleanTranspQuery(al) || al) : 0);
+        }}
+      }}
+      return best;
+    }}
+
+    function loadLocalTransportadoras() {{
+      try {{
+        const customList = JSON.parse(localStorage.getItem("opsul_custom_transportadoras") || "[]");
+        const existingKeys = new Set(transportadorasList.map(t => stripAccents(t.nome)));
+        for (const c of customList) {{
+          if (c && c.nome && !existingKeys.has(stripAccents(c.nome))) {{
+            transportadorasList.unshift({{ nome: c.nome.toUpperCase(), count: c.count || 1, aliases: [] }});
+            existingKeys.add(stripAccents(c.nome));
+          }}
+        }}
+      }} catch (_) {{}}
+    }}
+
+    window.saveNewTransportadoraToList = function(rawName) {{
+      const clean = (rawName || "").trim().replace(/\\s+/g, " ").toUpperCase();
+      if (!clean) return;
+      // Verifica se já existe correspondência exata ou por núcleo Fuzzy >= 850
+      let bestMatch = null;
+      let bestSc = 0;
+      for (const t of transportadorasList) {{
+        const sc = transpFuzzyScore(clean, t);
+        if (sc > bestSc) {{
+          bestSc = sc;
+          bestMatch = t;
+        }}
+      }}
+      if (bestMatch && bestSc >= 850) {{
+        selectTransportadora(bestMatch.nome);
+        return;
+      }}
+      if (!transportadorasList.some(t => stripAccents(t.nome) === stripAccents(clean))) {{
+        transportadorasList.unshift({{ nome: clean, count: 1, aliases: [] }});
+        try {{
+          const customList = JSON.parse(localStorage.getItem("opsul_custom_transportadoras") || "[]");
+          if (!customList.some(x => stripAccents(x.nome) === stripAccents(clean))) {{
+            customList.unshift({{ nome: clean, count: 1 }});
+            localStorage.setItem("opsul_custom_transportadoras", JSON.stringify(customList));
+          }}
+        }} catch (_) {{}}
+      }}
+      selectTransportadora(clean);
+    }};
+
+    function renderTranspDropdown() {{
+      const q = inpTranspSearch.value.trim();
+      const scored = [];
+      for (const t of transportadorasList) {{
+        const sc = transpFuzzyScore(q, t);
+        if (sc > 0) scored.push({{ ...t, score: sc }});
+      }}
+      scored.sort((a, b) => b.score - a.score || b.count - a.count || a.nome.localeCompare(b.nome));
+
+      let html = scored.slice(0, 50).map(item => {{
+        const matchType = item.score >= 700 ? "Exato / Variação" : (item.score >= 500 ? "Subsequência" : "Aproximação Fuzzy");
+        const safeNome = item.nome.replace(/'/g, "\\\\'");
+        return `
+          <div class="fuzzy-item" onclick="selectTransportadora('${{safeNome}}')">
+            <div class="fuzzy-item-main">
+              <strong style="font-size:13px; color:var(--ink);">${{item.nome}}</strong>
+              <span class="fuzzy-badge" style="background:var(--vg-secondary);">${{item.count}} Blitz</span>
+            </div>
+            <span class="fuzzy-score">${{q ? matchType : "Histórico"}}</span>
+          </div>
+        `;
+      }}).join("");
+
+      const exactExists = transportadorasList.some(t => stripAccents(t.nome) === stripAccents(q) || cleanTranspQuery(t.nome) === cleanTranspQuery(q));
+      if (q.length >= 2 && !exactExists) {{
+        const safeQ = q.toUpperCase().replace(/'/g, "\\\\'");
+        html = `
+          <div class="fuzzy-add-new" onclick="saveNewTransportadoraToList('${{safeQ}}')">
+            <span>+ Usar / cadastrar nova transportadora "${{q.toUpperCase()}}"</span>
+            <span class="badge-pill" style="background:var(--vy-accent); color:var(--ink); padding:2px 8px; border-radius:999px; font-size:10px;">USAR NOME</span>
+          </div>
+        ` + html;
+      }} else if (!html) {{
+        html = `<div style="padding:14px; color:var(--mut); font-size:13px;">Digite o nome da Transportadora acima.</div>`;
+      }}
+
+      transpResultsList.innerHTML = html;
+    }}
+
+    window.selectTransportadora = function(nome) {{
+      inpTranspSearch.value = nome;
+      inpTransportadora.value = nome;
+      transpDropdown.classList.remove("open");
+      btnClearTransp.style.display = "inline-block";
+      document.getElementById("transpComboWrapper").classList.remove("input-error");
+      document.getElementById("errTransportadora").classList.remove("visible");
+    }};
+
+    inpTranspSearch.addEventListener("focus", () => {{
+      renderTranspDropdown();
+      transpDropdown.classList.add("open");
+    }});
+
+    inpTranspSearch.addEventListener("input", () => {{
+      inpTransportadora.value = "";
+      btnClearTransp.style.display = inpTranspSearch.value ? "inline-block" : "none";
+      renderTranspDropdown();
+      transpDropdown.classList.add("open");
+    }});
+
+    inpTranspSearch.addEventListener("keydown", (e) => {{
+      if (e.key === "Enter" && inpTranspSearch.value.trim().length >= 2) {{
+        e.preventDefault();
+        saveNewTransportadoraToList(inpTranspSearch.value.trim());
+      }}
+    }});
+
+    inpTranspSearch.addEventListener("blur", () => {{
+      setTimeout(() => {{
+        if (!inpTransportadora.value && inpTranspSearch.value.trim().length >= 2) {{
+          saveNewTransportadoraToList(inpTranspSearch.value.trim());
+        }}
+      }}, 220);
+    }});
+
+    btnClearTransp.addEventListener("click", () => {{
+      inpTranspSearch.value = "";
+      inpTransportadora.value = "";
+      btnClearTransp.style.display = "none";
+      inpTranspSearch.focus();
+    }});
+
+    document.getElementById("btnToggleTranspDropdown").addEventListener("click", () => {{
+      if (transpDropdown.classList.contains("open")) {{
+        transpDropdown.classList.remove("open");
+      }} else {{
+        renderTranspDropdown();
+        transpDropdown.classList.add("open");
+      }}
+    }});
+
+    // Fechar dropdowns de Base e Transportadora ao clicar fora
     document.addEventListener("click", (e) => {{
       if (!document.getElementById("baseComboWrapper").contains(e.target)) {{
         baseDropdown.classList.remove("open");
@@ -2036,6 +2244,9 @@ def main():
           const exact = basesList.find(b => stripAccents(b) === stripAccents(inpBaseSearch.value));
           if (exact) selectBase(exact);
         }}
+      }}
+      if (!document.getElementById("transpComboWrapper").contains(e.target)) {{
+        transpDropdown.classList.remove("open");
       }}
     }});
 
@@ -2107,8 +2318,12 @@ def main():
       document.getElementById("errCifFob").classList.toggle("visible", !cifFob);
       if (!cifFob) valid = false;
 
-      const transp = document.getElementById("inpTransportadora").value.trim();
-      document.getElementById("inpTransportadora").classList.toggle("input-error", !transp);
+      let transp = document.getElementById("inpTransportadora").value.trim();
+      const transpSearchTyped = document.getElementById("inpTranspSearch").value.trim().toUpperCase();
+      if (!transp && transpSearchTyped) {{
+        transp = saveNewTransportadoraToList(transpSearchTyped);
+      }}
+      document.getElementById("transpComboWrapper").classList.toggle("input-error", !transp);
       document.getElementById("errTransportadora").classList.toggle("visible", !transp);
       if (!transp) valid = false;
 
@@ -2233,6 +2448,9 @@ def main():
     window.resetFormKeepUser = function() {{
       document.getElementById("inpData").value = getLocalDateString();
       document.getElementById("inpTransportadora").value = "";
+      document.getElementById("inpTranspSearch").value = "";
+      document.getElementById("btnClearTransp").style.display = "none";
+      document.getElementById("transpComboWrapper").classList.remove("input-error");
       document.getElementById("inpPlaca").value = "";
       document.getElementById("inpObsGeral").value = "";
       for (let i = 1; i <= 5; i++) {{
@@ -2315,9 +2533,8 @@ def main():
     (async function init() {{
       document.getElementById("inpData").value = getLocalDateString();
 
-      // Popular datalist de transportadoras
-      const dl = document.getElementById("transportadorasDatalist");
-      dl.innerHTML = INITIAL_TRANSPORTADORAS.map(t => `<option value="${{t}}"></option>`).join("");
+      // Carregar catálogo unificado de transportadoras (Fuzzy + localStorage)
+      loadLocalTransportadoras();
 
       // Restaurar última base operacional selecionada no dispositivo
       const savedBase = localStorage.getItem("opsul_saved_base");
@@ -2337,7 +2554,7 @@ def main():
     repo_wr_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "webresources", "opsul_blitz_sms_app.html")
     with open(repo_wr_path, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"Generated {out_path} and {repo_wr_path} ({len(html)} bytes, {len(bases)} bases, {len(responsaveis)} responsaveis)")
+    print(f"Generated {out_path} and {repo_wr_path} ({len(html)} bytes, {len(bases)} bases, {len(responsaveis)} responsaveis, {len(top_transp)} transportadoras canonicas)")
 
 if __name__ == "__main__":
     main()
