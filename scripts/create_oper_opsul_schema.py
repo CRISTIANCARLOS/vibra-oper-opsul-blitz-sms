@@ -203,6 +203,16 @@ def ensure_entity(schema_name, display_name, plural_name, desc, primary_attr_sch
                 print(f"  Adding attribute {attr['SchemaName']} to {schema_name}...")
                 dv_request("POST", f"EntityDefinitions(LogicalName='{logical_name}')/Attributes", attr, sol_headers)
 
+def drop_attribute_if_exists(entity_logical_name, attr_logical_name):
+    existing = dv_request("GET", f"EntityDefinitions(LogicalName='{entity_logical_name}')/Attributes?$select=LogicalName")
+    existing_names = {a["LogicalName"] for a in existing.get("value", [])}
+    if attr_logical_name.lower() in existing_names:
+        print(f"  Dropping attribute {attr_logical_name} from {entity_logical_name}...")
+        dv_request("DELETE", f"EntityDefinitions(LogicalName='{entity_logical_name}')/Attributes(LogicalName='{attr_logical_name.lower()}')")
+        print(f"  Dropped attribute {attr_logical_name} from {entity_logical_name}!")
+    else:
+        print(f"  Attribute {attr_logical_name} already absent on {entity_logical_name}.")
+
 def ensure_lookup(schema_name_rel, referenced_entity, referencing_entity, lookup_schema_name, lookup_display_name):
     res = dv_request("GET", f"EntityDefinitions(LogicalName='{referencing_entity}')/Attributes?$select=LogicalName")
     existing_names = {a["LogicalName"] for a in res.get("value", [])}
@@ -323,7 +333,6 @@ def main():
             memo_attr("opsul_obs_item4", "ObsItem4", 2000, "None", "Observações detalhadas do Item 04 (Aterramento/Overfill)"),
             bool_attr("opsul_item05_chave_geral_ok", "ITEM 05 - Chave Geral do CT Operacional e Identificada?", True, "ApplicationRequired", "Chave geral do CT está desempenhando sua função e possui identificação liga/desliga?"),
             memo_attr("opsul_obs_item5", "ObsItem5", 2000, "None", "Observações detalhadas do Item 05 (Chave Geral)"),
-            str_attr("opsul_motorista_bloqueado", "Motorista Bloqueado?", 30, "None", "Indica se o motorista foi bloqueado (SIM / NÃO)"),
             memo_attr("opsul_observacao_geral", "Observação Geral", 4000, "None", "Observações gerais da Blitz de SMS"),
             date_attr("opsul_sp_created", "Criado em (SharePoint)", False, "None", "Data/hora original de criação no SharePoint"),
             date_attr("opsul_sp_modified", "Modificado em (SharePoint)", False, "None", "Data/hora original de modificação no SharePoint"),
@@ -335,6 +344,9 @@ def main():
             img_attr("opsul_foto_item5", "Foto Evidência Item 05 (Chave Geral)", False, 10240, "Evidência fotográfica de não conformidade no Item 05 (Chave Geral do CT)")
         ]
     )
+
+    # Remover coluna descontinuada opsul_motorista_bloqueado se ainda existir no Dataverse
+    drop_attribute_if_exists("opsul_blitzsms", "opsul_motorista_bloqueado")
 
     # 5. Relacionamentos 1:N (Lookups relacionais)
     ensure_lookup(

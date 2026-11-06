@@ -156,7 +156,6 @@ def build_api_flow_clientdata(conn_ref_logical):
                     "item/opsul_obs_item4": "@coalesce(triggerBody()?['obs_item4'], '')",
                     "item/opsul_item05_chave_geral_ok": "@coalesce(triggerBody()?['item05_chave_geral_ok'], true)",
                     "item/opsul_obs_item5": "@coalesce(triggerBody()?['obs_item5'], '')",
-                    "item/opsul_motorista_bloqueado": "@coalesce(triggerBody()?['motorista_bloqueado'], 'NÃO')",
                     "item/opsul_observacao_geral": "@coalesce(triggerBody()?['observacao_geral'], '')"
                 }
             },
@@ -184,7 +183,6 @@ def build_api_flow_clientdata(conn_ref_logical):
                 "base": "@{triggerBody()?['base']}",
                 "responsavel_nome": "@{triggerBody()?['responsavel_nome']}",
                 "placa_ct": "@{triggerBody()?['placa_ct']}",
-                "motorista_bloqueado": "@{triggerBody()?['motorista_bloqueado']}",
                 "solution": "OPER_OPSUL"
             }
         },
@@ -252,7 +250,6 @@ def build_api_flow_clientdata(conn_ref_logical):
                                     "obs_item5": {"type": "string"},
                                     "foto_item5_base64": {"type": "string"},
                                     "foto_item5_nome": {"type": "string"},
-                                    "motorista_bloqueado": {"type": "string"},
                                     "observacao_geral": {"type": "string"}
                                 }
                             }

@@ -528,16 +528,6 @@ def main():
         if isinstance(item.get("CIFouFOB"), dict):
             cif_fob = item["CIFouFOB"].get("Value") or ""
 
-        bloqueado = ""
-        if isinstance(item.get("MotoristaBloqueado_x003f_"), dict):
-            val_b = str(item["MotoristaBloqueado_x003f_"].get("Value") or "").strip().upper()
-            if val_b in ("1", "SIM", "TRUE"):
-                bloqueado = "SIM"
-            elif val_b in ("0", "NÃO", "NAO", "FALSE"):
-                bloqueado = "NÃO"
-            else:
-                bloqueado = val_b
-
         author_name = ""
         if isinstance(item.get("Author"), dict):
             author_name = item["Author"].get("DisplayName") or ""
@@ -564,7 +554,6 @@ def main():
             "opsul_obs_item4": (item.get("ObsItem5") or "")[:2000],
             "opsul_item05_chave_geral_ok": bool(item.get("ChavegeraldoCTest_x00e1_desempen", True)),
             "opsul_obs_item5": (item.get("ObsItem6") or "")[:2000],
-            "opsul_motorista_bloqueado": bloqueado[:30],
             "opsul_observacao_geral": (item.get("Observa_x00e7__x00e3_o") or "")[:4000],
             "opsul_sp_author": author_name[:150]
         }

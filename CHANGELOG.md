@@ -1,5 +1,12 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.2.0] — 2026-11-06
+### Removido
+- **Remoção da Decisão de Bloqueio (`opsul_motorista_bloqueado`):**
+  - Remoção do bloco visual `"Decisão Crítica: Motorista / CT Bloqueado?"` (`#decisionBar`, `#inpBloqueado`, `selectBloqueado()`, `updateDecisionRecommendation()`) da Seção 03 do Portal Web [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html), que agora foca em **Observações Gerais e Fechamento da Blitz**.
+  - Remoção da propriedade `motorista_bloqueado` / `item/opsul_motorista_bloqueado` no trigger, na ação `Criar_Registro_Blitz_Dataverse` e no `Response_OK` do fluxo [`OPER_OPSUL - API Blitz de SMS (Sem Login)`](./flows/oper_opsul_api_blitz_de_sms/definition.wdl.json) (`592191f7-47d9-f111-84e8-e4fade0322c2`).
+  - Exclusão permanente da coluna `opsul_motorista_bloqueado` na tabela `opsul_blitzsms` no Microsoft Dataverse (`DELETE EntityDefinitions(LogicalName='opsul_blitzsms')/Attributes(LogicalName='opsul_motorista_bloqueado')`).
+
 ## [v1.1.0] — 2026-11-06
 ### Adicionado
 - **Evidência Fotográfica Opcional nas Não Conformidades (Itens 01 a 05):**

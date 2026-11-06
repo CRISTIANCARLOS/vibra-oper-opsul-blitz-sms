@@ -1071,40 +1071,6 @@ def main():
       cursor: pointer;
     }}
 
-    /* === BARRA DE DECISÃO CRÍTICA (MOTORISTA BLOQUEADO) === */
-    .decision-bar {{
-      background-color: var(--vd-primary);
-      color: var(--w-white);
-      border: 2px solid var(--vd-primary);
-      border-left: 8px solid var(--vy-accent);
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }}
-
-    .decision-bar.risk-active {{
-      background-color: #3A0D0B;
-      border-color: var(--crit);
-      border-left: 8px solid var(--vy-accent);
-    }}
-
-    .decision-info h3 {{
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--vy-accent);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }}
-
-    .decision-info p {{
-      font-size: 12px;
-      color: #E2ECE4;
-      margin-top: 4px;
-    }}
-
     /* === BOTÃO DE AÇÃO DIGITAL (#0000FF) === */
     .submit-footer {{
       display: flex;
@@ -1222,7 +1188,7 @@ def main():
       <div class="step-pills">
         <span class="step-pill active"><span class="num">1</span> Identificação & Base (Fuzzy)</span>
         <span class="step-pill active"><span class="num">2</span> Checklist Crítico (Itens 01 a 05)</span>
-        <span class="step-pill active"><span class="num">3</span> Decisão de Bloqueio & Registro</span>
+        <span class="step-pill active"><span class="num">3</span> Observações Gerais & Registro</span>
       </div>
       <div id="memoryIndicator" style="display:none;">
         <span class="saved-user-pill" id="savedUserBadge"></span>
@@ -1706,31 +1672,17 @@ def main():
         </div>
       </section>
 
-      <!-- SEÇÃO 03: DECISÃO CRÍTICA DE BLOQUEIO E OBSERVAÇÕES GERAIS -->
+      <!-- SEÇÃO 03: OBSERVAÇÕES GERAIS E FECHAMENTO DA BLITZ -->
       <section class="section-card">
         <div class="section-header">
           <div class="section-header-left">
             <span class="section-num">SEÇÃO 03</span>
-            <h2 class="section-title">Decisão de Bloqueio Operacional e Observações Gerais</h2>
+            <h2 class="section-title">Observações Gerais e Fechamento da Blitz</h2>
           </div>
           <span class="section-tag">Fechamento da Blitz</span>
         </div>
 
         <div class="section-body" style="display: flex; flex-direction: column; gap: 20px;">
-
-          <div class="decision-bar" id="decisionBar">
-            <div class="decision-info">
-              <h3>Decisão Crítica: Motorista / CT Bloqueado?</h3>
-              <p id="decisionHint">Indique obrigatoriamente se houve bloqueio do motorista/CT em decorrência da inspeção.</p>
-            </div>
-            <div style="min-width: 280px;">
-              <div class="choice-group">
-                <button type="button" class="choice-btn active-ok" id="btnBloqNao" onclick="selectBloqueado('NÃO')">NÃO BLOQUEADO</button>
-                <button type="button" class="choice-btn" id="btnBloqSim" onclick="selectBloqueado('SIM')">⚠ SIM, BLOQUEADO</button>
-              </div>
-              <input type="hidden" id="inpBloqueado" value="NÃO" required />
-            </div>
-          </div>
 
           <div class="field-group">
             <div class="field-label-row">
@@ -2153,8 +2105,6 @@ def main():
       if (isOk) {{
         clearPhotoItem(num);
       }}
-
-      updateDecisionRecommendation();
     }};
 
     window.toggleChip = function(el) {{
@@ -2163,24 +2113,6 @@ def main():
 
     function getSelectedChips(containerId) {{
       return Array.from(document.querySelectorAll(`#${{containerId}} .chip-option.selected`)).map(el => el.getAttribute("data-val"));
-    }}
-
-    window.selectBloqueado = function(val) {{
-      document.getElementById("inpBloqueado").value = val;
-      document.getElementById("btnBloqNao").classList.toggle("active-ok", val === "NÃO");
-      document.getElementById("btnBloqSim").classList.toggle("active-crit", val === "SIM");
-    }};
-
-    function updateDecisionRecommendation() {{
-      const anyFailed = Object.values(itemState).some(v => v === false);
-      const bar = document.getElementById("decisionBar");
-      const hint = document.getElementById("decisionHint");
-      bar.classList.toggle("risk-active", anyFailed);
-      if (anyFailed) {{
-        hint.innerHTML = `<strong style="color:var(--vy-accent);">⚠ ATENÇÃO:</strong> Há item(ns) crítico(s) reprovado(s) acima. Avalie o bloqueio imediato do CT/Motorista.`;
-      }} else {{
-        hint.textContent = "Todos os 5 itens críticos estão conformes. Confirme a decisão final abaixo.";
-      }}
     }}
 
     // === VALIDAÇÃO RIGOROSA DOS CAMPOS CRÍTICOS OBRIGATÓRIOS ===
@@ -2295,7 +2227,6 @@ def main():
         obs_item5: document.getElementById("inpObs5").value.trim(),
         foto_item5_base64: (!itemState[5] && itemPhotos[5]) ? itemPhotos[5].base64 : "",
         foto_item5_nome: (!itemState[5] && itemPhotos[5]) ? itemPhotos[5].nome : "",
-        motorista_bloqueado: document.getElementById("inpBloqueado").value,
         observacao_geral: document.getElementById("inpObsGeral").value.trim()
       }};
 
@@ -2319,7 +2250,7 @@ def main():
         const banner = document.getElementById("successBanner");
         const protoTxt = apiRes.protocolo ? `Protocolo: ${{apiRes.protocolo}} | ` : "";
         document.getElementById("successDetails").textContent =
-          `${{protoTxt}}Base: ${{payload.base}} | Placa CT: ${{payload.placa_ct}} | Transportadora: ${{payload.transportadora}} | Responsável: ${{payload.responsavel_nome}} | Bloqueado: ${{payload.motorista_bloqueado}} | Fotos salvas no Dataverse: ${{totalPhotos}}`;
+          `${{protoTxt}}Base: ${{payload.base}} | Placa CT: ${{payload.placa_ct}} | Transportadora: ${{payload.transportadora}} | Responsável: ${{payload.responsavel_nome}} | Fotos salvas no Dataverse: ${{totalPhotos}}`;
         banner.classList.add("visible");
         window.scrollTo({{ top: 0, behavior: "smooth" }});
       }} catch (err) {{
@@ -2340,7 +2271,6 @@ def main():
         document.getElementById(`inpObs${{i}}`).value = "";
       }}
       document.querySelectorAll(".chip-option.selected").forEach(c => c.classList.remove("selected"));
-      selectBloqueado("NÃO");
       document.getElementById("successBanner").classList.remove("visible");
     }};
 

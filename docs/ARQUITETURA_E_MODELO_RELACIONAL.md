@@ -59,7 +59,6 @@ erDiagram
         string opsul_obs_item4 "Observação Item 04"
         boolean opsul_item05_chave_geral_ok "ITEM 05 - Chave Geral OK?"
         string opsul_obs_item5 "Observação Item 05"
-        string opsul_motorista_bloqueado "Motorista Bloqueado? (SIM/NÃO)"
         string opsul_observacao_geral "Observação Geral"
         image opsul_foto_item1 "Foto Evidência Item 01 (ImageType 10MB)"
         image opsul_foto_item2 "Foto Evidência Item 02 (ImageType 10MB)"
