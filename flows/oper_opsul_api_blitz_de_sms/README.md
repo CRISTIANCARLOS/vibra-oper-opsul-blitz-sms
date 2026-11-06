@@ -7,14 +7,17 @@
 - **Autenticação do Trigger:** `All` (**Acesso Anônimo / Sem Login**)
 
 ## Descrição
-Fluxo HTTP POST anônimo (triggerAuthenticationType=All) que recebe as submissões do formulário Blitz de SMS, gera protocolo único e retorna confirmação JSON com suporte a CORS.
+Fluxo HTTP POST anônimo (`triggerAuthenticationType=All`) que recebe as submissões do formulário Blitz de SMS, cria o registro na tabela `opsul_blitzsms` (`CreateRecord`) e grava as fotos opcionais de não conformidade (`opsul_foto_item1` a `opsul_foto_item5`) como binário nativo no Dataverse (`UpdateEntityFileImageFieldContent`), retornando o protocolo único e o `blitz_id` via JSON com suporte a CORS.
 
 ## Fluxograma WDL
 ```mermaid
 flowchart TD
     TRIG(["⚡ Trigger HTTP Request: manual (Anonymous / All)"])
-    ACT["⚙️ Processamento & Response HTTP 200"]
-    TRIG --> ACT
+    PROTO["⚙️ Compose_Protocolo"]
+    CREATE["🗄️ Criar_Registro_Blitz_Dataverse (CreateRecord -> opsul_blitzsmses)"]
+    FOTO["📷 Cond_Foto_Item1..5 -> Upload_Foto_Item1..5 (UpdateEntityFileImageFieldContent)"]
+    ACT["✅ Response_OK (HTTP 200 JSON + CORS)"]
+    TRIG --> PROTO --> CREATE --> FOTO --> ACT
 ```
 
 ## Arquivos neste Diretório

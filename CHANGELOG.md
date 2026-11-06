@@ -1,5 +1,12 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.1.0] — 2026-11-06
+### Adicionado
+- **Evidência Fotográfica Opcional nas Não Conformidades (Itens 01 a 05):**
+  - Provisionamento de **5 colunas nativas de imagem (`Microsoft.Dynamics.CRM.ImageAttributeMetadata`)** na tabela `opsul_blitzsms` (`opsul_foto_item1` a `opsul_foto_item5`) com `CanStoreFullImage: true` e `MaxSizeInKB: 10240` (armazenamento binário no Azure Blob Storage gerenciado pelo Dataverse sem consumir limites de texto da tabela).
+  - Componente de captura/upload opcional (`<input type="file" accept="image/*" capture="environment">`) dentro das gavetas de não conformidade dos 5 itens no formulário [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html), com redimensionamento e compressão em navegador via `<canvas>` (JPEG máx. `1280px`, ~120–250 KB) e miniatura instantânea.
+  - Evolução do fluxo [`OPER_OPSUL - API Blitz de SMS (Sem Login)`](./flows/oper_opsul_api_blitz_de_sms/definition.wdl.json) (`592191f7-47d9-f111-84e8-e4fade0322c2`) com criação do registro via `CreateRecord` e upload binário das fotos em duas etapas via `UpdateEntityFileImageFieldContent` (`@base64ToBinary`).
+
 ## [v1.0.0] — 2026-11-05
 ### Adicionado
 - Criação da solução relacional **`OPER_OPSUL`** (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`) e do Publisher **`OPER_OPSUL Vibra Energia`** (`opsul_`) no ambiente **Cristian Ferreira Carlos** (`https://orgd15f46d4.crm2.dynamics.com`).

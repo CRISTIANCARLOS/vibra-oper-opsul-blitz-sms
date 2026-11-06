@@ -1,11 +1,12 @@
 {
-  "shared_office365": {
+  "shared_commondataserviceforapps": {
     "runtimeSource": "embedded",
     "connection": {
-      "name": "shared-office365-ae3adf4f"
+      "name": "shared-commondataser-b382b50b",
+      "connectionReferenceLogicalName": "opsul_sharedcommondataserviceforapps"
     },
     "api": {
-      "name": "shared_office365"
+      "name": "shared_commondataserviceforapps"
     }
   }
 }

@@ -43,6 +43,49 @@
       "displayName": "Blitz de SMS",
       "recordsCount": 3761,
       "primaryNameAttribute": "opsul_titulo",
+      "primaryImageAttribute": "opsul_foto_item1",
+      "imageColumns": [
+        {
+          "logicalName": "opsul_foto_item1",
+          "displayName": "Foto Evidência Item 01 (EPIs)",
+          "type": "ImageType",
+          "canStoreFullImage": true,
+          "maxSizeInKB": 10240,
+          "isPrimaryImage": true
+        },
+        {
+          "logicalName": "opsul_foto_item2",
+          "displayName": "Foto Evidência Item 02 (Veículo/Peças)",
+          "type": "ImageType",
+          "canStoreFullImage": true,
+          "maxSizeInKB": 10240,
+          "isPrimaryImage": false
+        },
+        {
+          "logicalName": "opsul_foto_item3",
+          "displayName": "Foto Evidência Item 03 (Tanque)",
+          "type": "ImageType",
+          "canStoreFullImage": true,
+          "maxSizeInKB": 10240,
+          "isPrimaryImage": false
+        },
+        {
+          "logicalName": "opsul_foto_item4",
+          "displayName": "Foto Evidência Item 04 (Aterramento/Overfill)",
+          "type": "ImageType",
+          "canStoreFullImage": true,
+          "maxSizeInKB": 10240,
+          "isPrimaryImage": false
+        },
+        {
+          "logicalName": "opsul_foto_item5",
+          "displayName": "Foto Evidência Item 05 (Chave Geral)",
+          "type": "ImageType",
+          "canStoreFullImage": true,
+          "maxSizeInKB": 10240,
+          "isPrimaryImage": false
+        }
+      ],
       "relationships": [
         "opsul_base_opsul_blitzsms (opsul_baseid -> opsul_base)",
         "opsul_responsavel_opsul_blitzsms (opsul_responsavelid -> opsul_responsavel)"

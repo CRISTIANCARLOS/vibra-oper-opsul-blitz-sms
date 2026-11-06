@@ -121,6 +121,18 @@ def date_attr(schema_name, display_name, date_only=True, req_level="None", desc=
         "Description": label(desc or display_name)
     }
 
+def img_attr(schema_name, display_name, is_primary=False, max_kb=10240, desc=""):
+    return {
+        "@odata.type": "Microsoft.Dynamics.CRM.ImageAttributeMetadata",
+        "AttributeTypeName": {"Value": "ImageType"},
+        "SchemaName": schema_name,
+        "IsPrimaryImage": is_primary,
+        "CanStoreFullImage": True,
+        "MaxSizeInKB": max_kb,
+        "DisplayName": label(display_name),
+        "Description": label(desc or display_name)
+    }
+
 def ensure_publisher():
     res = dv_request("GET", "publishers?$filter=uniquename eq 'oper_opsul_publisher'&$select=publisherid,uniquename")
     if res.get("value"):
@@ -315,7 +327,12 @@ def main():
             memo_attr("opsul_observacao_geral", "Observação Geral", 4000, "None", "Observações gerais da Blitz de SMS"),
             date_attr("opsul_sp_created", "Criado em (SharePoint)", False, "None", "Data/hora original de criação no SharePoint"),
             date_attr("opsul_sp_modified", "Modificado em (SharePoint)", False, "None", "Data/hora original de modificação no SharePoint"),
-            str_attr("opsul_sp_author", "Criado por (SharePoint)", 150, "None", "Autor original do registro no SharePoint")
+            str_attr("opsul_sp_author", "Criado por (SharePoint)", 150, "None", "Autor original do registro no SharePoint"),
+            img_attr("opsul_foto_item1", "Foto Evidência Item 01 (EPIs)", True, 10240, "Evidência fotográfica de não conformidade no Item 01 (EPIs)"),
+            img_attr("opsul_foto_item2", "Foto Evidência Item 02 (Veículo/Peças)", False, 10240, "Evidência fotográfica de não conformidade no Item 02 (Estrutura e Peças)"),
+            img_attr("opsul_foto_item3", "Foto Evidência Item 03 (Tanque)", False, 10240, "Evidência fotográfica de não conformidade no Item 03 (Tanque)"),
+            img_attr("opsul_foto_item4", "Foto Evidência Item 04 (Aterramento/Overfill)", False, 10240, "Evidência fotográfica de não conformidade no Item 04 (Aterramento, Overfill e Acesso)"),
+            img_attr("opsul_foto_item5", "Foto Evidência Item 05 (Chave Geral)", False, 10240, "Evidência fotográfica de não conformidade no Item 05 (Chave Geral do CT)")
         ]
     )
 

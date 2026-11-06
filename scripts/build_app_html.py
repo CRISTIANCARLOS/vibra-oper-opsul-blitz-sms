@@ -977,6 +977,100 @@ def main():
       color: var(--w-white);
     }}
 
+    /* === EVIDÊNCIA FOTOGRÁFICA OPCIONAL (CANVAS + DATAVERSE IMAGE COLUMN) === */
+    .badge-opt {{
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--vd-primary);
+      background-color: #E7F4E4;
+      border: 1px solid #B7DFB0;
+      padding: 1px 8px;
+      border-radius: var(--radius-pill);
+    }}
+
+    .photo-upload-box {{
+      margin-top: 12px;
+      padding: 12px 14px;
+      background-color: var(--w-white);
+      border: 1.5px dashed var(--vg-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }}
+
+    .photo-upload-actions {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }}
+
+    .btn-photo-capture {{
+      background-color: var(--vd-primary);
+      color: var(--w-white);
+      border: none;
+      padding: 8px 14px;
+      font-family: var(--font-main);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.3px;
+    }}
+
+    .btn-photo-capture:hover {{
+      background-color: var(--vg-secondary);
+    }}
+
+    .photo-preview-card {{
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      background-color: var(--soft);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--vg-secondary);
+    }}
+
+    .photo-preview-card.visible {{
+      display: flex;
+    }}
+
+    .photo-preview-left {{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }}
+
+    .photo-preview-thumb {{
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background-color: var(--w-white);
+    }}
+
+    .photo-meta-text {{
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 12px;
+    }}
+
+    .btn-photo-remove {{
+      background-color: #FEECEB;
+      color: var(--crit);
+      border: 1px solid #F8C9C5;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }}
+
     /* === BARRA DE DECISÃO CRÍTICA (MOTORISTA BLOQUEADO) === */
     .decision-bar {{
       background-color: var(--vd-primary);
@@ -1348,6 +1442,29 @@ def main():
                   <input type="text" id="inpObs1" placeholder="Descreva o desvio identificado nos EPIs..." />
                   <span class="error-msg" id="errObs1">Descreva a observação referente à não conformidade do Item 01.</span>
                 </div>
+                <div class="photo-upload-box">
+                  <div class="photo-upload-actions">
+                    <div>
+                      <span class="field-label">Evidência Fotográfica — Item 01 (EPIs)</span>
+                      <span class="badge-opt" style="margin-left:6px;">OPCIONAL</span>
+                      <div class="field-hint">Armazenamento nativo em coluna de imagem do Dataverse (<code>opsul_foto_item1</code>).</div>
+                    </div>
+                    <div>
+                      <input type="file" id="inpFoto1" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoInput(1, this)" />
+                      <button type="button" class="btn-photo-capture" onclick="document.getElementById('inpFoto1').click()">📷 Tirar / Anexar Foto</button>
+                    </div>
+                  </div>
+                  <div class="photo-preview-card" id="photoPreviewCard1">
+                    <div class="photo-preview-left">
+                      <img id="photoThumb1" class="photo-preview-thumb" alt="Preview Item 01" />
+                      <div class="photo-meta-text">
+                        <strong id="photoName1" style="color:var(--vd-primary);"></strong>
+                        <span id="photoSize1" style="color:var(--mut); font-size:11px;"></span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-photo-remove" onclick="clearPhotoItem(1)">✕ Remover Foto</button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1394,6 +1511,29 @@ def main():
                   <input type="text" id="inpObs2" placeholder="Descreva a avaria ou peça quebrada no veículo..." />
                   <span class="error-msg" id="errObs2">Descreva a observação referente à não conformidade do Item 02.</span>
                 </div>
+                <div class="photo-upload-box">
+                  <div class="photo-upload-actions">
+                    <div>
+                      <span class="field-label">Evidência Fotográfica — Item 02 (Estrutura / Peças)</span>
+                      <span class="badge-opt" style="margin-left:6px;">OPCIONAL</span>
+                      <div class="field-hint">Armazenamento nativo em coluna de imagem do Dataverse (<code>opsul_foto_item2</code>).</div>
+                    </div>
+                    <div>
+                      <input type="file" id="inpFoto2" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoInput(2, this)" />
+                      <button type="button" class="btn-photo-capture" onclick="document.getElementById('inpFoto2').click()">📷 Tirar / Anexar Foto</button>
+                    </div>
+                  </div>
+                  <div class="photo-preview-card" id="photoPreviewCard2">
+                    <div class="photo-preview-left">
+                      <img id="photoThumb2" class="photo-preview-thumb" alt="Preview Item 02" />
+                      <div class="photo-meta-text">
+                        <strong id="photoName2" style="color:var(--vd-primary);"></strong>
+                        <span id="photoSize2" style="color:var(--mut); font-size:11px;"></span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-photo-remove" onclick="clearPhotoItem(2)">✕ Remover Foto</button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1425,6 +1565,29 @@ def main():
                   </div>
                   <input type="text" id="inpObs3" placeholder="Detalhe a condição insegura identificada no tanque..." />
                   <span class="error-msg" id="errObs3">Descreva a observação referente à não conformidade do Item 03.</span>
+                </div>
+                <div class="photo-upload-box">
+                  <div class="photo-upload-actions">
+                    <div>
+                      <span class="field-label">Evidência Fotográfica — Item 03 (Tanque)</span>
+                      <span class="badge-opt" style="margin-left:6px;">OPCIONAL</span>
+                      <div class="field-hint">Armazenamento nativo em coluna de imagem do Dataverse (<code>opsul_foto_item3</code>).</div>
+                    </div>
+                    <div>
+                      <input type="file" id="inpFoto3" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoInput(3, this)" />
+                      <button type="button" class="btn-photo-capture" onclick="document.getElementById('inpFoto3').click()">📷 Tirar / Anexar Foto</button>
+                    </div>
+                  </div>
+                  <div class="photo-preview-card" id="photoPreviewCard3">
+                    <div class="photo-preview-left">
+                      <img id="photoThumb3" class="photo-preview-thumb" alt="Preview Item 03" />
+                      <div class="photo-meta-text">
+                        <strong id="photoName3" style="color:var(--vd-primary);"></strong>
+                        <span id="photoSize3" style="color:var(--mut); font-size:11px;"></span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-photo-remove" onclick="clearPhotoItem(3)">✕ Remover Foto</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1458,6 +1621,29 @@ def main():
                   <input type="text" id="inpObs4" placeholder="Detalhe a falha de aterramento, sensor overfill ou degraus..." />
                   <span class="error-msg" id="errObs4">Descreva a observação referente à não conformidade do Item 04.</span>
                 </div>
+                <div class="photo-upload-box">
+                  <div class="photo-upload-actions">
+                    <div>
+                      <span class="field-label">Evidência Fotográfica — Item 04 (Aterramento / Overfill)</span>
+                      <span class="badge-opt" style="margin-left:6px;">OPCIONAL</span>
+                      <div class="field-hint">Armazenamento nativo em coluna de imagem do Dataverse (<code>opsul_foto_item4</code>).</div>
+                    </div>
+                    <div>
+                      <input type="file" id="inpFoto4" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoInput(4, this)" />
+                      <button type="button" class="btn-photo-capture" onclick="document.getElementById('inpFoto4').click()">📷 Tirar / Anexar Foto</button>
+                    </div>
+                  </div>
+                  <div class="photo-preview-card" id="photoPreviewCard4">
+                    <div class="photo-preview-left">
+                      <img id="photoThumb4" class="photo-preview-thumb" alt="Preview Item 04" />
+                      <div class="photo-meta-text">
+                        <strong id="photoName4" style="color:var(--vd-primary);"></strong>
+                        <span id="photoSize4" style="color:var(--mut); font-size:11px;"></span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-photo-remove" onclick="clearPhotoItem(4)">✕ Remover Foto</button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1489,6 +1675,29 @@ def main():
                   </div>
                   <input type="text" id="inpObs5" placeholder="Detalhe o problema constatado no teste da chave geral..." />
                   <span class="error-msg" id="errObs5">Descreva a observação referente à não conformidade do Item 05.</span>
+                </div>
+                <div class="photo-upload-box">
+                  <div class="photo-upload-actions">
+                    <div>
+                      <span class="field-label">Evidência Fotográfica — Item 05 (Chave Geral)</span>
+                      <span class="badge-opt" style="margin-left:6px;">OPCIONAL</span>
+                      <div class="field-hint">Armazenamento nativo em coluna de imagem do Dataverse (<code>opsul_foto_item5</code>).</div>
+                    </div>
+                    <div>
+                      <input type="file" id="inpFoto5" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoInput(5, this)" />
+                      <button type="button" class="btn-photo-capture" onclick="document.getElementById('inpFoto5').click()">📷 Tirar / Anexar Foto</button>
+                    </div>
+                  </div>
+                  <div class="photo-preview-card" id="photoPreviewCard5">
+                    <div class="photo-preview-left">
+                      <img id="photoThumb5" class="photo-preview-thumb" alt="Preview Item 05" />
+                      <div class="photo-meta-text">
+                        <strong id="photoName5" style="color:var(--vd-primary);"></strong>
+                        <span id="photoSize5" style="color:var(--mut); font-size:11px;"></span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-photo-remove" onclick="clearPhotoItem(5)">✕ Remover Foto</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1562,6 +1771,67 @@ def main():
     let responsaveisList = [...INITIAL_RESPONSAVEIS];
     let activeBaseCat = "ALL";
     let itemState = {{ 1: true, 2: true, 3: true, 4: true, 5: true }};
+    let itemPhotos = {{ 1: null, 2: null, 3: null, 4: null, 5: null }};
+
+    // === COMPRESSÃO CLIENT-SIDE VIA CANVAS & PREPARAÇÃO BASE64 PARA DATAVERSE ===
+    window.handlePhotoInput = function(itemNum, inputEl) {{
+      const file = inputEl && inputEl.files && inputEl.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {{
+        const img = new Image();
+        img.onload = function() {{
+          const maxDim = 1280;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {{
+            if (w >= h) {{
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            }} else {{
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }}
+          }}
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+
+          // Exporta JPEG otimizado (78%) e extrai Base64 puro (sem prefixo data:image/jpeg;base64,)
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+          const base64Pure = dataUrl.split(",")[1] || "";
+          const sizeKb = Math.max(1, Math.round((base64Pure.length * 3) / 4 / 1024));
+          const safeName = `blitz_item0${{itemNum}}_${{Date.now()}}.jpg`;
+
+          itemPhotos[itemNum] = {{
+            base64: base64Pure,
+            nome: safeName,
+            sizeKb: sizeKb,
+            width: w,
+            height: h
+          }};
+
+          document.getElementById(`photoThumb${{itemNum}}`).src = dataUrl;
+          document.getElementById(`photoName${{itemNum}}`).textContent = `✓ Evidência pronta (${{safeName}})`;
+          document.getElementById(`photoSize${{itemNum}}`).textContent = `${{w}}x${{h}}px • ${{sizeKb}} KB (JPEG comprimido para Dataverse Image)`;
+          document.getElementById(`photoPreviewCard${{itemNum}}`).classList.add("visible");
+        }};
+        img.src = evt.target.result;
+      }};
+      reader.readAsDataURL(file);
+    }};
+
+    window.clearPhotoItem = function(itemNum) {{
+      itemPhotos[itemNum] = null;
+      const inp = document.getElementById(`inpFoto${{itemNum}}`);
+      if (inp) inp.value = "";
+      const card = document.getElementById(`photoPreviewCard${{itemNum}}`);
+      if (card) card.classList.remove("visible");
+      const thumb = document.getElementById(`photoThumb${{itemNum}}`);
+      if (thumb) thumb.removeAttribute("src");
+    }};
 
     // === UTILITÁRIO DE NORMALIZAÇÃO E BUSCA FUZZY ===
     function stripAccents(str) {{
@@ -1880,6 +2150,10 @@ def main():
       btnNao.classList.toggle("active-crit", !isOk);
       drawer.classList.toggle("visible", !isOk);
 
+      if (isOk) {{
+        clearPhotoItem(num);
+      }}
+
       updateDecisionRecommendation();
     }};
 
@@ -2002,20 +2276,33 @@ def main():
         item01_epis_ok: itemState[1],
         qual_epi_inapropriado: getSelectedChips("chipsEpi").join(", "),
         obs_item1: document.getElementById("inpObs1").value.trim(),
+        foto_item1_base64: (!itemState[1] && itemPhotos[1]) ? itemPhotos[1].base64 : "",
+        foto_item1_nome: (!itemState[1] && itemPhotos[1]) ? itemPhotos[1].nome : "",
         item02_veiculo_ok: itemState[2],
         qual_peca_nao_conforme: getSelectedChips("chipsPeca").join(", "),
         obs_item2: document.getElementById("inpObs2").value.trim(),
+        foto_item2_base64: (!itemState[2] && itemPhotos[2]) ? itemPhotos[2].base64 : "",
+        foto_item2_nome: (!itemState[2] && itemPhotos[2]) ? itemPhotos[2].nome : "",
         item03_tanque_ok: itemState[3],
         obs_item3: document.getElementById("inpObs3").value.trim(),
+        foto_item3_base64: (!itemState[3] && itemPhotos[3]) ? itemPhotos[3].base64 : "",
+        foto_item3_nome: (!itemState[3] && itemPhotos[3]) ? itemPhotos[3].nome : "",
         item04_aterramento_ok: itemState[4],
         obs_item4: document.getElementById("inpObs4").value.trim(),
+        foto_item4_base64: (!itemState[4] && itemPhotos[4]) ? itemPhotos[4].base64 : "",
+        foto_item4_nome: (!itemState[4] && itemPhotos[4]) ? itemPhotos[4].nome : "",
         item05_chave_geral_ok: itemState[5],
         obs_item5: document.getElementById("inpObs5").value.trim(),
+        foto_item5_base64: (!itemState[5] && itemPhotos[5]) ? itemPhotos[5].base64 : "",
+        foto_item5_nome: (!itemState[5] && itemPhotos[5]) ? itemPhotos[5].nome : "",
         motorista_bloqueado: document.getElementById("inpBloqueado").value,
         observacao_geral: document.getElementById("inpObsGeral").value.trim()
       }};
 
+      const totalPhotos = [1, 2, 3, 4, 5].filter(i => !itemState[i] && itemPhotos[i] && itemPhotos[i].base64).length;
+
       try {{
+        let apiRes = {{}};
         if (FLOW_API_URL && !FLOW_API_URL.startsWith("__")) {{
           const resp = await fetch(FLOW_API_URL, {{
             method: "POST",
@@ -2023,14 +2310,16 @@ def main():
             body: JSON.stringify(payload)
           }});
           if (!resp.ok) throw new Error(`HTTP ${{resp.status}}`);
+          try {{ apiRes = await resp.json(); }} catch (_) {{}}
         }}
 
         const totalEl = document.getElementById("statTotalBlitz");
         totalEl.textContent = (parseInt(totalEl.textContent || "0", 10) + 1).toString();
 
         const banner = document.getElementById("successBanner");
+        const protoTxt = apiRes.protocolo ? `Protocolo: ${{apiRes.protocolo}} | ` : "";
         document.getElementById("successDetails").textContent =
-          `Base: ${{payload.base}} | Placa CT: ${{payload.placa_ct}} | Transportadora: ${{payload.transportadora}} | Responsável: ${{payload.responsavel_nome}} | Bloqueado: ${{payload.motorista_bloqueado}}`;
+          `${{protoTxt}}Base: ${{payload.base}} | Placa CT: ${{payload.placa_ct}} | Transportadora: ${{payload.transportadora}} | Responsável: ${{payload.responsavel_nome}} | Bloqueado: ${{payload.motorista_bloqueado}} | Fotos salvas no Dataverse: ${{totalPhotos}}`;
         banner.classList.add("visible");
         window.scrollTo({{ top: 0, behavior: "smooth" }});
       }} catch (err) {{
@@ -2047,6 +2336,7 @@ def main():
       document.getElementById("inpObsGeral").value = "";
       for (let i = 1; i <= 5; i++) {{
         setItemStatus(i, true);
+        clearPhotoItem(i);
         document.getElementById(`inpObs${{i}}`).value = "";
       }}
       document.querySelectorAll(".chip-option.selected").forEach(c => c.classList.remove("selected"));
@@ -2082,7 +2372,10 @@ def main():
     out_path = os.path.join(SCRATCH_DIR, "opsul_blitz_sms_app.html")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"Generated {out_path} ({len(html)} bytes, {len(bases)} bases, {len(responsaveis)} responsaveis)")
+    repo_wr_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "webresources", "opsul_blitz_sms_app.html")
+    with open(repo_wr_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"Generated {out_path} and {repo_wr_path} ({len(html)} bytes, {len(bases)} bases, {len(responsaveis)} responsaveis)")
 
 if __name__ == "__main__":
     main()
