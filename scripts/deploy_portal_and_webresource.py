@@ -141,6 +141,7 @@ def build_api_flow_clientdata(conn_ref_logical):
                     "item/opsul_data": "@coalesce(triggerBody()?['data'], formatDateTime(utcNow(), 'yyyy-MM-dd'))",
                     "item/opsul_base": "@coalesce(triggerBody()?['base'], 'N/A')",
                     "item/opsul_responsavel_nome": "@coalesce(triggerBody()?['responsavel_nome'], 'Não Informado')",
+                    "item/opsul_responsavel_email": "@coalesce(triggerBody()?['responsavel_email'], '')",
                     "item/opsul_transportadora": "@coalesce(triggerBody()?['transportadora'], '')",
                     "item/opsul_placa_ct": "@coalesce(triggerBody()?['placa_ct'], '')",
                     "item/opsul_cif_fob": "@coalesce(triggerBody()?['cif_fob'], '')",
@@ -182,6 +183,7 @@ def build_api_flow_clientdata(conn_ref_logical):
                 "blitz_id": "@{outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid']}",
                 "base": "@{triggerBody()?['base']}",
                 "responsavel_nome": "@{triggerBody()?['responsavel_nome']}",
+                "responsavel_email": "@{triggerBody()?['responsavel_email']}",
                 "placa_ct": "@{triggerBody()?['placa_ct']}",
                 "solution": "OPER_OPSUL"
             }
@@ -225,6 +227,8 @@ def build_api_flow_clientdata(conn_ref_logical):
                                     "data": {"type": "string"},
                                     "base": {"type": "string"},
                                     "responsavel_nome": {"type": "string"},
+                                    "responsavel_email": {"type": "string"},
+                                    "auth_systemuserid": {"type": "string"},
                                     "transportadora": {"type": "string"},
                                     "placa_ct": {"type": "string"},
                                     "cif_fob": {"type": "string"},
@@ -316,7 +320,16 @@ def main():
     })
     print(f"Published Web Resource {wr_name}!")
 
-    escaped_html = html_content.replace("@", "@@")
+    sso_url = "https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html"
+    redirect_html = (
+        "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8' />"
+        f"<meta http-equiv='refresh' content='0;url={sso_url}' />"
+        "<title>Redirecionando para Login Corporativo Vibra...</title>"
+        f"<script>window.location.replace('{sso_url}');</script></head>"
+        "<body style='font-family:sans-serif;background:#004415;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;'>"
+        f"<p>Redirecionando para autenticação corporativa Vibra Energia (<a href='{sso_url}' style='color:#FEDC00;'>clique aqui</a>)...</p>"
+        "</body></html>"
+    )
     portal_clientdata = {
         "properties": {
             "connectionReferences": {},
@@ -345,10 +358,9 @@ def main():
                             "statusCode": 200,
                             "headers": {
                                 "Content-Type": "text/html; charset=utf-8",
-                                "Access-Control-Allow-Origin": "*",
-                                "Cache-Control": "no-cache"
+                                "Cache-Control": "no-store, no-cache, must-revalidate"
                             },
-                            "body": escaped_html
+                            "body": redirect_html
                         },
                         "runAfter": {}
                     }

@@ -840,15 +840,67 @@
       font-size: 11px;
       font-weight: 700;
     }
+
+    /* === OVERLAY DE BLOQUEIO / VERIFICAÇÃO SSO VIBRA === */
+    .auth-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: linear-gradient(145deg, var(--vd-primary) 0%, var(--dark2) 100%);
+      color: var(--w-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .auth-gate-card {
+      max-width: 480px;
+      width: 100%;
+      background-color: rgba(11, 50, 24, 0.92);
+      border: 1px solid rgba(254, 220, 0, 0.35);
+      border-top: 6px solid var(--vy-accent);
+      padding: 32px 28px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .auth-gate-card h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--vy-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .auth-gate-card p {
+      font-size: 13px;
+      color: #DCE7D5;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- BLOQUEIO DE SEGURANÇA: EXIGE SESSÃO CORPORATIVA VIBRA (ENTRA ID / DATAVERSE SSO) -->
+  <div class="auth-gate-overlay" id="authGateOverlay">
+    <div class="auth-gate-card">
+      <h2>🔒 Acesso Corporativo Vibra Energia</h2>
+      <p id="authGateMessage">Verificando sua sessão autenticada no ambiente corporativo Vibra Energia (Microsoft Entra ID SSO)...</p>
+      <button type="button" class="btn-digital" id="btnAuthRedirect" style="display:none; width:100%; justify-content:center;" onclick="window.location.href='https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html'">
+        Entrar com Conta Corporativa Vibra
+      </button>
+    </div>
+  </div>
 
   <!-- CABEÇALHO DOMINANTE (#004415 VD Verde Escuro + #0B3218 DARK2 + #FEDC00 VY Amarelo) -->
   <header class="hero-header">
     <div class="hero-top-bar">
       <div>VIBRA ENERGIA • DIRETORIA DE OPERAÇÕES • SOLUÇÃO RELACIONAL <strong>OPER_OPSUL</strong></div>
-      <div><span class="badge-pill">ACESSO DIRETO • SEM LOGIN</span></div>
+      <div><span class="badge-pill" id="authBadgePill">🔒 AUTENTICANDO SESSÃO VIBRA...</span></div>
     </div>
     <div class="hero-main">
       <div class="hero-title-group">
@@ -1896,6 +1948,8 @@
         data: document.getElementById("inpData").value,
         base: document.getElementById("inpBaseValue").value,
         responsavel_nome: document.getElementById("inpRespValue").value,
+        responsavel_email: currentAuthUser.email || "",
+        auth_systemuserid: currentAuthUser.userId || "",
         transportadora: document.getElementById("inpTransportadora").value.trim(),
         placa_ct: document.getElementById("inpPlaca").value.trim().toUpperCase(),
         cif_fob: document.getElementById("inpCifFob").value,
@@ -1944,7 +1998,7 @@
         const banner = document.getElementById("successBanner");
         const protoTxt = apiRes.protocolo ? `Protocolo: ${apiRes.protocolo} | ` : "";
         document.getElementById("successDetails").textContent =
-          `${protoTxt}Base: ${payload.base} | Placa CT: ${payload.placa_ct} | Transportadora: ${payload.transportadora} | Responsável: ${payload.responsavel_nome} | Fotos salvas no Dataverse: ${totalPhotos}`;
+          `${protoTxt}Base: ${payload.base} | Placa CT: ${payload.placa_ct} | Transportadora: ${payload.transportadora} | Responsável: ${payload.responsavel_nome} (${currentAuthUser.email || 'SSO Vibra'}) | Fotos salvas no Dataverse: ${totalPhotos}`;
         banner.classList.add("visible");
         window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (err) {
@@ -1968,8 +2022,79 @@
       document.getElementById("successBanner").classList.remove("visible");
     };
 
+    // === AUTENTICAÇÃO CORPORATIVA OBRIGATÓRIA (VIBRA ENTRA ID / DATAVERSE SSO) ===
+    const OFFICIAL_SSO_URL = "https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html";
+    let currentAuthUser = { userId: "", name: "", email: "", aadObjectId: "" };
+
+    function formatDisplayName(rawName) {
+      if (!rawName) return "";
+      const clean = rawName.replace(/^#\s*/, "").trim();
+      if (clean.includes(",")) {
+        const parts = clean.split(",").map(s => s.trim()).filter(Boolean);
+        if (parts.length === 2) return `${parts[1]} ${parts[0]}`;
+      }
+      return clean;
+    }
+
+    async function verifyCorporateSession() {
+      const overlay = document.getElementById("authGateOverlay");
+      const msgEl = document.getElementById("authGateMessage");
+      const btnRedirect = document.getElementById("btnAuthRedirect");
+
+      // Se não estiver no domínio autenticado do Dataverse da Vibra, redireciona para forçar o login SSO Microsoft Entra ID
+      if (window.location.hostname.toLowerCase() !== "orgd15f46d4.crm2.dynamics.com") {
+        msgEl.textContent = "Redirecionando para o login corporativo Vibra Energia (Microsoft Entra ID SSO)...";
+        btnRedirect.style.display = "inline-flex";
+        window.location.replace(OFFICIAL_SSO_URL);
+        return false;
+      }
+
+      try {
+        const whoResp = await fetch("/api/data/v9.2/WhoAmI", {
+          method: "GET",
+          credentials: "include",
+          headers: { "Accept": "application/json" }
+        });
+        if (!whoResp.ok) throw new Error(`Sessão não autenticada (HTTP ${whoResp.status})`);
+        const whoData = await whoResp.json();
+        const userId = whoData.UserId;
+        if (!userId) throw new Error("UserId ausente na sessão");
+
+        const userResp = await fetch(`/api/data/v9.2/systemusers(${userId})?$select=fullname,internalemailaddress,azureactivedirectoryobjectid`, {
+          method: "GET",
+          credentials: "include",
+          headers: { "Accept": "application/json" }
+        });
+        if (!userResp.ok) throw new Error(`Falha ao validar usuário corporativo (HTTP ${userResp.status})`);
+        const userData = await userResp.json();
+        const email = (userData.internalemailaddress || "").trim().toLowerCase();
+        const dispName = formatDisplayName(userData.fullname || "");
+
+        currentAuthUser = {
+          userId: userId,
+          name: dispName,
+          email: email,
+          aadObjectId: userData.azureactivedirectoryobjectid || ""
+        };
+
+        document.getElementById("authBadgePill").textContent = `🔒 VIBRA SSO • ${email || dispName}`;
+        overlay.style.display = "none";
+
+        if (dispName && !localStorage.getItem("opsul_saved_responsavel")) {
+          const savedBase = localStorage.getItem("opsul_saved_base") || "";
+          saveNewResponsavelToList(dispName, savedBase);
+          selectResponsavel(dispName, savedBase);
+        }
+        return true;
+      } catch (err) {
+        msgEl.textContent = "Para acessar o aplicativo Blitz de SMS, você precisa estar logado na sua conta corporativa Vibra Energia (@vibraenergia.com.br).";
+        btnRedirect.style.display = "inline-flex";
+        return false;
+      }
+    }
+
     // === INICIALIZAÇÃO ===
-    (function init() {
+    (async function init() {
       const today = new Date().toISOString().split("T")[0];
       document.getElementById("inpData").value = today;
 
@@ -1988,6 +2113,8 @@
       if (savedResp) {
         selectResponsavel(savedResp, savedBase);
       }
+
+      await verifyCorporateSession();
     })();
   </script>
 </body>

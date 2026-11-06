@@ -32,6 +32,12 @@
             "responsavel_nome": {
               "type": "string"
             },
+            "responsavel_email": {
+              "type": "string"
+            },
+            "auth_systemuserid": {
+              "type": "string"
+            },
             "transportadora": {
               "type": "string"
             },
@@ -135,6 +141,7 @@
           "item/opsul_data": "@coalesce(triggerBody()?['data'], formatDateTime(utcNow(), 'yyyy-MM-dd'))",
           "item/opsul_base": "@coalesce(triggerBody()?['base'], 'N/A')",
           "item/opsul_responsavel_nome": "@coalesce(triggerBody()?['responsavel_nome'], 'Não Informado')",
+          "item/opsul_responsavel_email": "@coalesce(triggerBody()?['responsavel_email'], '')",
           "item/opsul_transportadora": "@coalesce(triggerBody()?['transportadora'], '')",
           "item/opsul_placa_ct": "@coalesce(triggerBody()?['placa_ct'], '')",
           "item/opsul_cif_fob": "@coalesce(triggerBody()?['cif_fob'], '')",
@@ -399,6 +406,7 @@
           "blitz_id": "@{outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid']}",
           "base": "@{triggerBody()?['base']}",
           "responsavel_nome": "@{triggerBody()?['responsavel_nome']}",
+          "responsavel_email": "@{triggerBody()?['responsavel_email']}",
           "placa_ct": "@{triggerBody()?['placa_ct']}",
           "solution": "OPER_OPSUL"
         }

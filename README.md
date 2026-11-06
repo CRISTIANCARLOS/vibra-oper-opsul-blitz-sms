@@ -1,12 +1,13 @@
-# 🛡️ Solução Relacional `OPER_OPSUL` — Blitz de SMS & Portal Web (Sem Login)
+# 🛡️ Solução Relacional `OPER_OPSUL` — Blitz de SMS & Portal Web (Login Corporativo Vibra SSO)
 
-> **Repositório Oficial Versionado (`v1.0.0`)** — Banco de Dados Relacional `OPER_OPSUL` no Microsoft Dataverse (4 tabelas relacionais, **3.761 registros históricos** migrados, **204 bases operacionais**, **372 responsáveis** e tabela de **Usuários do Regional para SSO**) + Portal/Formulário Web Anônimo (Sem Login) com Design System Vibra Energia e Busca Fuzzy.
+> **Repositório Oficial Versionado (`v1.3.0`)** — Banco de Dados Relacional `OPER_OPSUL` no Microsoft Dataverse (4 tabelas relacionais, **3.761 registros históricos** migrados, **204 bases operacionais**, **372 responsáveis** e tabela de **Usuários do Regional para SSO**) + Aplicativo Web com **Login Corporativo Obrigatório Vibra Energia (Microsoft Entra ID / Dataverse SSO)**, Design System Vibra Energia, Busca Fuzzy e Evidência Fotográfica Nativa.
 
 - **Ambiente Power Platform:** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3`)
 - **Dataverse URL:** `https://orgd15f46d4.crm2.dynamics.com`
 - **Solução Dataverse:** `OPER_OPSUL` (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`)
 - **Publisher:** `OPER_OPSUL Vibra Energia` (prefixo `opsul_`)
-- **Link Público do App (Sem Login):** [Abrir Portal Blitz de SMS — OPER_OPSUL](https://4a9ba0774920ea16ae45293f56eb85.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/22bf8a38645945cea776aadeb945e1e9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lX9gzbxvImHj0A29PSf5YqK96YoU56w9VuQSGBCsEQo)
+- **Link Oficial do App (Exige Login Corporativo Vibra SSO):** [Abrir Aplicativo Blitz de SMS — OPER_OPSUL (SSO Vibra)](https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html)
+- **Link de Redirecionamento Automático (`HTTP 302 -> SSO Vibra`):** [Redirecionador Portal OPER_OPSUL](https://4a9ba0774920ea16ae45293f56eb85.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/22bf8a38645945cea776aadeb945e1e9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lX9gzbxvImHj0A29PSf5YqK96YoU56w9VuQSGBCsEQo)
 
 ---
 

@@ -1,5 +1,12 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.3.0] — 2026-11-06
+### Alterado
+- **Exigência de Login Corporativo no Ambiente Vibra (Microsoft Entra ID / Dataverse SSO):**
+  - O aplicativo [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html) agora exige sessão corporativa ativa no ambiente Vibra (`https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html`), validando a identidade via `/api/data/v9.2/WhoAmI` e `/api/data/v9.2/systemusers` antes de desbloquear o formulário (`#authGateOverlay`).
+  - O fluxo [`OPER_OPSUL - Portal Web Blitz de SMS`](./flows/oper_opsul_portal_web_blitz_de_sms/definition.wdl.json) (`8bfaac34-48d9-f111-84e8-e4fade0322c2`) deixou de servir o HTML sem login e agora responde com `HTTP 302 Found` redirecionando para `https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html` (forçando o login Microsoft Entra ID `@vibraenergia.com.br` quando o usuário não estiver autenticado).
+  - Preenchimento e envio automático do e-mail do usuário autenticado (`responsavel_email` -> `opsul_responsavel_email`) na gravação da Blitz de SMS.
+
 ## [v1.2.0] — 2026-11-06
 ### Removido
 - **Remoção da Decisão de Bloqueio (`opsul_motorista_bloqueado`):**
