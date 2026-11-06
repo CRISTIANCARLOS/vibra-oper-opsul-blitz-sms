@@ -619,6 +619,16 @@ def main():
       border-radius: var(--radius-pill);
     }}
 
+    .badge-lock {{
+      font-size: 10px;
+      font-weight: 700;
+      color: #334155;
+      background-color: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 1px 8px;
+      border-radius: var(--radius-pill);
+    }}
+
     .field-hint {{
       font-size: 11px;
       color: var(--mut);
@@ -646,6 +656,15 @@ def main():
       outline: none;
       border-color: var(--vd-primary);
       box-shadow: 0 0 0 3px rgba(0, 68, 21, 0.14);
+    }}
+
+    input[readonly],
+    input:read-only {{
+      background-color: #F8FAFC !important;
+      color: #334155 !important;
+      cursor: not-allowed !important;
+      border-color: #CBD5E1 !important;
+      user-select: none;
     }}
 
     input.input-error,
@@ -1277,11 +1296,11 @@ def main():
             <!-- DATA DA BLITZ -->
             <div class="field-group col-4">
               <div class="field-label-row">
-                <label class="field-label" for="inpData">Data da Blitz</label>
-                <span class="badge-req">OBRIGATÓRIO</span>
+                <span class="field-label">Data da Blitz</span>
+                <span class="badge-lock">🔒 AUTOMÁTICA (HOJE)</span>
               </div>
-              <input type="date" id="inpData" required />
-              <span class="field-hint">Data de realização da inspeção em campo.</span>
+              <input type="date" id="inpData" readonly tabindex="-1" style="pointer-events: none;" required />
+              <span class="field-hint">Preenchida automaticamente com a data de hoje (bloqueada para alteração).</span>
               <span class="error-msg" id="errData">Informe a data da Blitz.</span>
             </div>
 
@@ -2167,11 +2186,23 @@ def main():
       return Array.from(document.querySelectorAll(`#${{containerId}} .chip-option.selected`)).map(el => el.getAttribute("data-val"));
     }}
 
+    function getLocalDateString() {{
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${{year}}-${{month}}-${{day}}`;
+    }}
+
     // === VALIDAÇÃO RIGOROSA DOS CAMPOS CRÍTICOS OBRIGATÓRIOS ===
     function validateForm() {{
       let valid = true;
 
-      const dataVal = document.getElementById("inpData").value;
+      let dataVal = document.getElementById("inpData").value;
+      if (!dataVal) {{
+        document.getElementById("inpData").value = getLocalDateString();
+        dataVal = document.getElementById("inpData").value;
+      }}
       document.getElementById("errData").classList.toggle("visible", !dataVal);
       if (!dataVal) valid = false;
 
@@ -2316,6 +2347,7 @@ def main():
     }});
 
     window.resetFormKeepUser = function() {{
+      document.getElementById("inpData").value = getLocalDateString();
       document.getElementById("inpTransportadora").value = "";
       document.getElementById("inpPlaca").value = "";
       document.getElementById("inpObsGeral").value = "";
@@ -2401,8 +2433,7 @@ def main():
 
     // === INICIALIZAÇÃO ===
     (async function init() {{
-      const today = new Date().toISOString().split("T")[0];
-      document.getElementById("inpData").value = today;
+      document.getElementById("inpData").value = getLocalDateString();
 
       // Popular datalist de transportadoras
       const dl = document.getElementById("transportadorasDatalist");
