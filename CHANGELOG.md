@@ -1,5 +1,12 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.5.0] — 2026-11-06
+### Alterado
+- **Bloqueio de Seleção Manual de Terceiros — Responsável Vinculado Exclusivamente ao Login Corporativo Vibra SSO (100% Compatível com o Banco Atual):**
+  - Remoção da lista/seletor de escolha de nomes de terceiros (`#respDropdown`, `#btnToggleRespDropdown`, `#btnClearResp`, `localStorage.opsul_saved_responsavel`) no formulário [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html).
+  - O campo **Nome do Responsável pela Blitz** agora é `readonly` (`🔒 AUTOMÁTICO (LOGIN CORPORATIVO)`) e preenchido automaticamente a partir da sessão autenticada no Microsoft Entra ID / Dataverse (`/api/data/v9.2/WhoAmI` + `/api/data/v9.2/systemusers`).
+  - **Compatibilidade total sem alteração no banco de dados:** A função `lockResponsavelFromCorporateLogin()` normaliza o nome do usuário autenticado contra o catálogo histórico de 372 nomes (`opsul_responsavel`) quando já existente e envia os mesmos campos `responsavel_nome` (`opsul_responsavel_nome`) e `responsavel_email` (`opsul_responsavel_email`) para a tabela `opsul_blitzsms` (`opsul_blitzsmses`), sem exigir qualquer mudança estrutural no Dataverse.
+
 ## [v1.4.0] — 2026-11-06
 ### Adicionado
 - **Alerta Automático de Desvios no Microsoft Teams para a Unidade `BAERI` (Grupo `Blitz SSMA BAERI`):**

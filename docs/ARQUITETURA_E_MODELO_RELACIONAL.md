@@ -4,7 +4,7 @@
 **Publisher:** `OPER_OPSUL Vibra Energia` (`oper_opsul_publisher`, prefixo `opsul_`)  
 **Ambiente Power Platform:** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3`)  
 **Organização Dataverse:** `https://orgd15f46d4.crm2.dynamics.com`  
-**Versão:** `v1.4.0` (`2026-11-06`)
+**Versão:** `v1.5.0` (`2026-11-06`)
 
 ---
 
@@ -89,10 +89,10 @@ Contém todas as siglas operacionais deduplicadas (`AIBET`, `AIÇAI`, `AICAMP`, 
 - `opsul_destinatarios_teams` (`String(500)`): ID da conversa/grupo no Microsoft Teams que recebe o aviso.
 - **Unidade Piloto Ativa (`v1.4.0`):** **`BAERI`** (`45684e05-47d9-f111-84e8-e4fade0322c2`) configurada com `opsul_alerta_teams_ativo = true` e `opsul_destinatarios_teams = "19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2"` (grupo **`Blitz SSMA BAERI`**). O aviso é enviado como Adaptive Card v1.4 puramente informativo (**sem botões de ação**).
 
-### 2.3. `opsul_responsavel` (`opsul_responsavels`) — Catálogo de Responsáveis pela Blitz (372 registros) & Operação em Tablets Compartilhados
-Implementa a regra **"escreve o nome uma vez, depois escolhe na lista"**, combinada com **Login Corporativo Vibra SSO**:
-- **Autenticação do Dispositivo (`opsul_responsavel_email`):** O acesso ao aplicativo (`https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html`) exige uma sessão corporativa ativa no ambiente Vibra Energia (`@vibraenergia.com.br`), validada em tempo real via `/api/data/v9.2/WhoAmI`.
-- **Uso Compartilhado em Base (`opsul_responsavel_nome`):** Em bases onde um único tablet corporativo é compartilhado por dezenas de operadores (ex.: o gerente/supervisor autentica sua conta Vibra no aparelho e ~40 pessoas realizam inspeções ao longo dos turnos), o seletor **Responsável pela Blitz** permanece editável para que cada inspetor selecione seu próprio nome na lista de 372 responsáveis (ou cadastre seu nome uma única vez).
+### 2.3. `opsul_responsavel` (`opsul_responsavels`) — Catálogo Histórico de Responsáveis (372 registros) & Vínculo Estrito ao Login Corporativo
+Preserva os 372 nomes históricos e opera em total compatibilidade com o **Login Corporativo Individual Vibra SSO** sem exigir nenhuma mudança nas tabelas do banco:
+- **Identidade Bloqueada pelo Login Corporativo (`opsul_responsavel_nome` & `opsul_responsavel_email`):** O acesso ao aplicativo (`https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html`) exige uma sessão corporativa ativa no ambiente Vibra Energia (`@vibraenergia.com.br`), validada em tempo real via `/api/data/v9.2/WhoAmI` e `/api/data/v9.2/systemusers`.
+- **Sem Escolha de Nome de Terceiros:** O campo **Nome do Responsável pela Blitz** é bloqueado (`readonly`, `🔒 AUTOMÁTICO (LOGIN CORPORATIVO)`) e preenchido automaticamente pelo sistema com o nome e e-mail do usuário autenticado (normalizando com o catálogo de 372 nomes caso já exista, mantendo 100% de compatibilidade com a coluna `opsul_responsavel_nome` e com os 3.761 registros históricos do banco).
 
 ### 2.4. `opsul_blitzsms` (`opsul_blitzsmses`) — Tabela Fato de Inspeções Blitz de SMS (3.761 registros)
 Mapeia integralmente todas as colunas e dados históricos da lista SharePoint `Blitz de SMS` (`4d397d74-e478-446a-a6ba-69e9d4bcf094`), preservando o `ID` original em `opsul_sp_id`, vinculando os lookups relacionais `opsul_baseid` e `opsul_responsavelid` e armazenando até **5 fotos opcionais de evidência de não conformidade** (`opsul_foto_item1` a `opsul_foto_item5`, tipo nativo `ImageAttributeMetadata` com até `10 MB` cada no Azure Blob Storage gerenciado pelo Dataverse).

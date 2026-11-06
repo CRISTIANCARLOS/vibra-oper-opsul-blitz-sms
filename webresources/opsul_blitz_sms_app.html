@@ -1035,32 +1035,23 @@
               <span class="error-msg" id="errBase">Selecione uma Base Operacional válida da lista.</span>
             </div>
 
-            <!-- RESPONSÁVEL PELA BLITZ (ESCREVE 1 VEZ -> DEPOIS ESCOLHE NA LISTA) -->
-            <div class="field-group col-8">
+            <!-- RESPONSÁVEL PELA BLITZ (VINCULADO AO LOGIN CORPORATIVO VIBRA SSO) -->
+            <div class="field-group col-8" id="respComboWrapper">
               <div class="field-label-row">
-                <label class="field-label" for="inpRespSearch">Nome do Responsável pela Blitz</label>
-                <span class="badge-req">OBRIGATÓRIO</span>
+                <span class="field-label">Nome do Responsável pela Blitz</span>
+                <span class="badge-lock">🔒 AUTOMÁTICO (LOGIN CORPORATIVO)</span>
               </div>
-              <div class="combobox-wrapper" id="respComboWrapper">
-                <div class="combobox-input-box">
-                  <input
-                    type="text"
-                    id="inpRespSearch"
-                    placeholder="Escolha seu nome na lista ou digite pela 1ª vez para salvar automaticamente..."
-                    autocomplete="off"
-                  />
-                  <div class="combobox-actions">
-                    <button type="button" class="combo-btn" id="btnClearResp" title="Trocar Responsável" style="display:none;">Trocar</button>
-                    <button type="button" class="combo-btn" id="btnToggleRespDropdown">▼ Nomes</button>
-                  </div>
-                </div>
-                <input type="hidden" id="inpRespValue" required />
-                <div class="fuzzy-dropdown" id="respDropdown">
-                  <div id="respResultsList"></div>
-                </div>
-              </div>
-              <span class="field-hint">Você escreve o nome apenas <strong>uma única vez</strong>: ele fica gravado na lista para os próximos acessos.</span>
-              <span class="error-msg" id="errResp">Selecione ou cadastre o nome do Responsável pela Blitz.</span>
+              <input
+                type="text"
+                id="inpRespSearch"
+                readonly
+                tabindex="-1"
+                style="pointer-events: none; font-weight: 700;"
+                placeholder="Identificando usuário do login corporativo Vibra..."
+              />
+              <input type="hidden" id="inpRespValue" required />
+              <span class="field-hint">Vinculado automaticamente ao seu login corporativo Vibra Energia (sem opção de escolher outro nome).</span>
+              <span class="error-msg" id="errResp">Autentique-se com seu login corporativo Vibra para preencher o Responsável pela Blitz.</span>
             </div>
 
             <!-- MODALIDADE CIF OU FOB -->
@@ -1698,141 +1689,40 @@
       });
     });
 
-    // === COMBOBOX DE RESPONSÁVEL (ESCREVE 1 VEZ -> DEPOIS ESCOLHE NA LISTA) ===
+    // === RESPONSÁVEL PELA BLITZ (BLOQUEADO E VINCULADO AO LOGIN CORPORATIVO VIBRA) ===
     const inpRespSearch = document.getElementById("inpRespSearch");
     const inpRespValue = document.getElementById("inpRespValue");
-    const respDropdown = document.getElementById("respDropdown");
-    const respResultsList = document.getElementById("respResultsList");
-    const btnClearResp = document.getElementById("btnClearResp");
 
-    function loadLocalResponsaveis() {
-      try {
-        const customList = JSON.parse(localStorage.getItem("opsul_custom_responsaveis") || "[]");
-        const existingKeys = new Set(responsaveisList.map(r => r.nome.toUpperCase()));
-        for (const c of customList) {
-          if (c && c.nome && !existingKeys.has(c.nome.toUpperCase())) {
-            responsaveisList.unshift({ nome: c.nome, base: c.base || "", count: c.count || 1 });
-            existingKeys.add(c.nome.toUpperCase());
-          }
-        }
-      } catch (e) {}
-    }
+    function lockResponsavelFromCorporateLogin(rawDispName, email) {
+      const fallbackName = rawDispName || (email ? email.split("@")[0].replace(/[._-]+/g, " ").toUpperCase() : "");
+      const matched = responsaveisList.find(r => stripAccents(r.nome) === stripAccents(fallbackName));
+      const canonicalName = matched ? matched.nome : fallbackName;
+      const suggestedBase = matched ? matched.base : "";
 
-    function saveNewResponsavelToList(nome, base) {
-      const clean = nome.trim().replace(/\s+/g, " ");
-      if (!clean) return;
-      const exists = responsaveisList.find(r => r.nome.toUpperCase() === clean.toUpperCase());
-      if (!exists) {
-        responsaveisList.unshift({ nome: clean, base: base || "", count: 1 });
-      }
-      try {
-        const customList = JSON.parse(localStorage.getItem("opsul_custom_responsaveis") || "[]");
-        if (!customList.find(x => x.nome.toUpperCase() === clean.toUpperCase())) {
-          customList.unshift({ nome: clean, base: base || "", count: 1 });
-          localStorage.setItem("opsul_custom_responsaveis", JSON.stringify(customList));
-        }
-      } catch (e) {}
-      selectResponsavel(clean, base);
-    }
-
-    function renderRespDropdown() {
-      const q = inpRespSearch.value.trim();
-      const scored = [];
-      for (const r of responsaveisList) {
-        const sc = fuzzyScore(q, r.nome);
-        if (sc > 0) scored.push({ ...r, score: sc });
-      }
-      scored.sort((a, b) => b.score - a.score || b.count - a.count || a.nome.localeCompare(b.nome));
-
-      let html = scored.slice(0, 50).map(r => `
-        <div class="fuzzy-item" onclick="selectResponsavel('${r.nome.replace(/'/g, "\\'")}', '${(r.base || "").replace(/'/g, "\\'")}')">
-          <div class="fuzzy-item-main">
-            <strong style="color:var(--ink);">${r.nome}</strong>
-            ${r.base ? `<span class="fuzzy-badge" style="background:var(--vg-secondary);">${r.base}</span>` : ""}
-          </div>
-          <span class="fuzzy-score">Selecionar da lista</span>
-        </div>
-      `).join("");
-
-      const exactExists = responsaveisList.some(r => stripAccents(r.nome) === stripAccents(q));
-      if (q.length >= 2 && !exactExists) {
-        const safeQ = q.replace(/'/g, "\\'");
-        html = `
-          <div class="fuzzy-add-new" onclick="saveNewResponsavelToList('${safeQ}', document.getElementById('inpBaseValue').value)">
-            <span>+ Cadastrar "${q}" na lista (1ª vez) e selecionar</span>
-            <span class="badge-pill" style="background:var(--vy-accent); color:var(--ink); padding:2px 8px; border-radius:999px; font-size:10px;">SALVAR NOME</span>
-          </div>
-        ` + html;
-      } else if (!html) {
-        html = `<div style="padding:14px; color:var(--mut); font-size:13px;">Digite seu nome acima para adicioná-lo à lista.</div>`;
-      }
-
-      respResultsList.innerHTML = html;
-    }
-
-    window.selectResponsavel = function(nome, suggestedBase) {
-      inpRespSearch.value = nome;
-      inpRespValue.value = nome;
-      respDropdown.classList.remove("open");
-      btnClearResp.style.display = "inline-block";
+      inpRespValue.value = canonicalName;
+      inpRespSearch.value = email ? `${canonicalName} (${email})` : canonicalName;
       document.getElementById("respComboWrapper").classList.remove("input-error");
       document.getElementById("errResp").classList.remove("visible");
 
-      localStorage.setItem("opsul_saved_responsavel", nome);
+      // Limpar qualquer seleção antiga de terceiros salva no navegador
+      try {
+        localStorage.removeItem("opsul_saved_responsavel");
+        localStorage.removeItem("opsul_custom_responsaveis");
+      } catch (_) {}
+
       const memInd = document.getElementById("memoryIndicator");
       const memBadge = document.getElementById("savedUserBadge");
-      memInd.style.display = "block";
-      memBadge.textContent = `✓ Responsável ativo: ${nome}`;
+      if (canonicalName) {
+        memInd.style.display = "block";
+        memBadge.textContent = `🔒 Login Corporativo: ${canonicalName}`;
+      }
 
       if (suggestedBase && !inpBaseValue.value && basesList.includes(suggestedBase)) {
         selectBase(suggestedBase);
       }
-    };
+    }
 
-    inpRespSearch.addEventListener("focus", () => {
-      renderRespDropdown();
-      respDropdown.classList.add("open");
-    });
-
-    inpRespSearch.addEventListener("input", () => {
-      inpRespValue.value = "";
-      renderRespDropdown();
-      respDropdown.classList.add("open");
-    });
-
-    inpRespSearch.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && inpRespSearch.value.trim().length >= 2) {
-        e.preventDefault();
-        saveNewResponsavelToList(inpRespSearch.value.trim(), inpBaseValue.value);
-      }
-    });
-
-    // Se o usuário digitou o nome e saiu do campo, salva automaticamente na lista ("escreve uma vez, depois escolhe na lista")
-    inpRespSearch.addEventListener("blur", () => {
-      setTimeout(() => {
-        if (!inpRespValue.value && inpRespSearch.value.trim().length >= 2) {
-          saveNewResponsavelToList(inpRespSearch.value.trim(), inpBaseValue.value);
-        }
-      }, 220);
-    });
-
-    btnClearResp.addEventListener("click", () => {
-      inpRespSearch.value = "";
-      inpRespValue.value = "";
-      btnClearResp.style.display = "none";
-      inpRespSearch.focus();
-    });
-
-    document.getElementById("btnToggleRespDropdown").addEventListener("click", () => {
-      if (respDropdown.classList.contains("open")) {
-        respDropdown.classList.remove("open");
-      } else {
-        renderRespDropdown();
-        respDropdown.classList.add("open");
-      }
-    });
-
-    // Fechar dropdowns ao clicar fora
+    // Fechar dropdown de Base ao clicar fora
     document.addEventListener("click", (e) => {
       if (!document.getElementById("baseComboWrapper").contains(e.target)) {
         baseDropdown.classList.remove("open");
@@ -1840,9 +1730,6 @@
           const exact = basesList.find(b => stripAccents(b) === stripAccents(inpBaseSearch.value));
           if (exact) selectBase(exact);
         }
-      }
-      if (!document.getElementById("respComboWrapper").contains(e.target)) {
-        respDropdown.classList.remove("open");
       }
     });
 
@@ -1905,10 +1792,6 @@
       document.getElementById("errBase").classList.toggle("visible", !baseVal);
       if (!baseVal) valid = false;
 
-      const respVal = document.getElementById("inpRespValue").value || inpRespSearch.value.trim();
-      if (respVal && !document.getElementById("inpRespValue").value) {
-        saveNewResponsavelToList(respVal, baseVal);
-      }
       const finalResp = document.getElementById("inpRespValue").value;
       document.getElementById("respComboWrapper").classList.toggle("input-error", !finalResp);
       document.getElementById("errResp").classList.toggle("visible", !finalResp);
@@ -2113,11 +1996,7 @@
         document.getElementById("authBadgePill").textContent = `🔒 VIBRA SSO • ${email || dispName}`;
         overlay.style.display = "none";
 
-        if (dispName && !localStorage.getItem("opsul_saved_responsavel")) {
-          const savedBase = localStorage.getItem("opsul_saved_base") || "";
-          saveNewResponsavelToList(dispName, savedBase);
-          selectResponsavel(dispName, savedBase);
-        }
+        lockResponsavelFromCorporateLogin(dispName, email);
         return true;
       } catch (err) {
         msgEl.textContent = "Para acessar o aplicativo Blitz de SMS, você precisa estar logado na sua conta corporativa Vibra Energia (@vibraenergia.com.br).";
@@ -2134,16 +2013,10 @@
       const dl = document.getElementById("transportadorasDatalist");
       dl.innerHTML = INITIAL_TRANSPORTADORAS.map(t => `<option value="${t}"></option>`).join("");
 
-      loadLocalResponsaveis();
-
-      // Restaurar último responsável e base salvos no dispositivo ("escreve 1 vez, depois escolhe na lista")
-      const savedResp = localStorage.getItem("opsul_saved_responsavel");
+      // Restaurar última base operacional selecionada no dispositivo
       const savedBase = localStorage.getItem("opsul_saved_base");
       if (savedBase && basesList.includes(savedBase)) {
         selectBase(savedBase);
-      }
-      if (savedResp) {
-        selectResponsavel(savedResp, savedBase);
       }
 
       await verifyCorporateSession();

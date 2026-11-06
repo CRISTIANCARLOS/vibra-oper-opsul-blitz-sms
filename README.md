@@ -1,6 +1,6 @@
 # 🛡️ Solução Relacional `OPER_OPSUL` — Blitz de SMS & Portal Web (Login Corporativo Vibra SSO + Alerta Teams BAERI)
 
-> **Repositório Oficial Versionado (`v1.4.0`)** — Banco de Dados Relacional `OPER_OPSUL` no Microsoft Dataverse (4 tabelas relacionais, **3.761 registros históricos** migrados, **204 bases operacionais**, **372 responsáveis** e tabela de **Usuários do Regional para SSO**) + Aplicativo Web com **Login Corporativo Obrigatório Vibra Energia (Microsoft Entra ID / Dataverse SSO)**, Design System Vibra Energia, Busca Fuzzy, Evidência Fotográfica Nativa e **Alerta Automático de Desvios no Microsoft Teams para a unidade `BAERI` (grupo `Blitz SSMA BAERI`)**.
+> **Repositório Oficial Versionado (`v1.5.0`)** — Banco de Dados Relacional `OPER_OPSUL` no Microsoft Dataverse (4 tabelas relacionais, **3.761 registros históricos** migrados, **204 bases operacionais**, **372 responsáveis** e tabela de **Usuários do Regional para SSO**) + Aplicativo Web com **Login Corporativo Individual Obrigatório Vibra Energia (Microsoft Entra ID / Dataverse SSO — Responsável bloqueado na sessão autenticada)**, Design System Vibra Energia, Busca Fuzzy, Evidência Fotográfica Nativa e **Alerta Automático de Desvios no Microsoft Teams para a unidade `BAERI` (grupo `Blitz SSMA BAERI`)**.
 
 - **Ambiente Power Platform (Solução & Dados):** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3` — `https://orgd15f46d4.crm2.dynamics.com`)
 - **Ambiente Power Platform (Relay Microsoft Teams):** `autoBR@x - Desenvolvimento` (`898c553e-12ff-e6c6-8b11-bc7586165a03` — `https://org165415fc.crm.dynamics.com`)
@@ -12,19 +12,19 @@
 
 ---
 
-## 1. Arquitetura da Solução `OPER_OPSUL` (`v1.4.0`)
+## 1. Arquitetura da Solução `OPER_OPSUL` (`v1.5.0`)
 
 ```mermaid
 flowchart LR
-    subgraph Frontend["📱 Camada de Apresentação (Login Vibra SSO + Tablet Compartilhado)"]
+    subgraph Frontend["📱 Camada de Apresentação (Login Corporativo Individual Vibra SSO)"]
         SSO["Login Corporativo Vibra SSO
 (/api/data/v9.2/WhoAmI)"]
         APP["Web Resource Blitz de SMS
 (Design Vibra #004415 / #268200 / #FEDC00)"]
         FZ["Busca Fuzzy de Base
 (204 Siglas Operacionais)"]
-        RESP_MEM["Seletor de Responsável
-(372 Nomes / Suporte a Tablet Compartilhado)"]
+        RESP_MEM["Responsável Bloqueado no Login SSO
+(Normalizado contra Catálogo de 372 Nomes)"]
         FOTO["Evidência Fotográfica Opcional
 (Compressão Canvas JPEG 1280px)"]
     end
@@ -65,7 +65,7 @@ flowchart LR
     F_TEAMS -->|"Aviso Adaptive Card"| GRP_BAERI
 ```
 
-> **Operação em Tablets Compartilhados nas Bases:** O aplicativo exige que o dispositivo esteja autenticado no ambiente corporativo da Vibra Energia (`@vibraenergia.com.br` via SSO no Dataverse), registrando a conta autenticada do aparelho em `opsul_responsavel_email`, enquanto mantém o seletor **Responsável pela Blitz** aberto (`opsul_responsavel_nome`) para que múltiplos inspetores/operadores que compartilham o mesmo tablet em campo selecionem seu próprio nome a cada Blitz.
+> **Responsável Vinculado ao Login Corporativo Individual (100% Compatível com o Banco Atual):** Cada usuário faz a Blitz autenticado em seu próprio login corporativo da Vibra Energia (`@vibraenergia.com.br` via SSO no Dataverse). O campo **Nome do Responsável pela Blitz** é bloqueado (`readonly`) e preenchido automaticamente a partir da sessão autenticada (`WhoAmI` + `systemusers`), cruzando com o catálogo de 372 nomes de `opsul_responsavel` quando existente e enviando os mesmos atributos `opsul_responsavel_nome` e `opsul_responsavel_email` para `opsul_blitzsms` sem qualquer alteração no banco de dados atual.
 >
 > **Alerta Automático de Desvios no Teams (`BAERI`):** Sempre que uma Blitz na **`BAERI`** (`opsul_alerta_teams_ativo = true`) registrar **1 ou mais desvios** no checklist (Itens 01 a 05), um card informativo (**sem botões de ação**) é publicado automaticamente no grupo **`Blitz SSMA BAERI`** do Microsoft Teams.
 
@@ -77,7 +77,7 @@ flowchart LR
 | :--- | :--- | :---: | :--- | :--- |
 | **`opsul_blitzsms`** | `opsul_blitzsmses` | **3.761** | Tabela fato principal de inspeções Blitz de SMS (25 atributos + 5 colunas `ImageType` 10 MB para fotos de NC + 2 lookups 1:N) | [`schema/oper_opsul_entities_metadata.json`](./schema/oper_opsul_entities_metadata.json) |
 | **`opsul_base`** | `opsul_bases` | **204** | Dimensão de Bases Operacionais (`BA`, `RA`, `AR`, `AI`, `DE`, `BE`, `SEDE`, `GEI`, `CCPP`, `EPS`) + parametrização de alertas no Teams (`opsul_alerta_teams_ativo`, `opsul_destinatarios_teams` — ativa em `BAERI`) | [`schema/bases_catalogo_204.json`](./schema/bases_catalogo_204.json) |
-| **`opsul_responsavel`** | `opsul_responsavels` | **372** | Dimensão de Responsáveis pela Blitz (*escreve o nome 1x e depois escolhe na lista*, ideal para tablets compartilhados) | [`schema/oper_opsul_entities_metadata.json`](./schema/oper_opsul_entities_metadata.json) |
+| **`opsul_responsavel`** | `opsul_responsavels` | **372** | Dimensão histórica de Responsáveis pela Blitz preservada intacta e utilizada para normalização automática do usuário autenticado via SSO | [`schema/oper_opsul_entities_metadata.json`](./schema/oper_opsul_entities_metadata.json) |
 | **`opsul_usuarioregional`** | `opsul_usuarioregionals` | **2** | Usuários do Regional OPSUL (`wedson@vibraenergia.com.br` e `anasales@vibraenergia.com.br`) preparados para login SSO em solução futura | [`schema/usuarios_regionais_sso.json`](./schema/usuarios_regionais_sso.json) |
 
 ---
