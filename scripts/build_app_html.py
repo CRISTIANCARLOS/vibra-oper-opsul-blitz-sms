@@ -1429,7 +1429,7 @@ def main():
                 </div>
                 <div class="inspection-toggle">
                   <button type="button" class="choice-btn active-ok" id="btnItem1Sim" onclick="setItemStatus(1, true)">✓ SIM (Conforme)</button>
-                  <button type="button" class="choice-btn" id="btnItem1Nao" onclick="setItemStatus(1, false)">✕ NÃO (Crítico)</button>
+                  <button type="button" class="choice-btn" id="btnItem1Nao" onclick="setItemStatus(1, false)">✕ NÃO</button>
                 </div>
               </div>
 
@@ -1499,7 +1499,7 @@ def main():
                 </div>
                 <div class="inspection-toggle">
                   <button type="button" class="choice-btn active-ok" id="btnItem2Sim" onclick="setItemStatus(2, true)">✓ SIM (Conforme)</button>
-                  <button type="button" class="choice-btn" id="btnItem2Nao" onclick="setItemStatus(2, false)">✕ NÃO (Crítico)</button>
+                  <button type="button" class="choice-btn" id="btnItem2Nao" onclick="setItemStatus(2, false)">✕ NÃO</button>
                 </div>
               </div>
 
@@ -1568,7 +1568,7 @@ def main():
                 </div>
                 <div class="inspection-toggle">
                   <button type="button" class="choice-btn active-ok" id="btnItem3Sim" onclick="setItemStatus(3, true)">✓ SIM (Conforme)</button>
-                  <button type="button" class="choice-btn" id="btnItem3Nao" onclick="setItemStatus(3, false)">✕ NÃO (Crítico)</button>
+                  <button type="button" class="choice-btn" id="btnItem3Nao" onclick="setItemStatus(3, false)">✕ NÃO</button>
                 </div>
               </div>
 
@@ -1623,7 +1623,7 @@ def main():
                 </div>
                 <div class="inspection-toggle">
                   <button type="button" class="choice-btn active-ok" id="btnItem4Sim" onclick="setItemStatus(4, true)">✓ SIM (Conforme)</button>
-                  <button type="button" class="choice-btn" id="btnItem4Nao" onclick="setItemStatus(4, false)">✕ NÃO (Crítico)</button>
+                  <button type="button" class="choice-btn" id="btnItem4Nao" onclick="setItemStatus(4, false)">✕ NÃO</button>
                 </div>
               </div>
 
@@ -1678,7 +1678,7 @@ def main():
                 </div>
                 <div class="inspection-toggle">
                   <button type="button" class="choice-btn active-ok" id="btnItem5Sim" onclick="setItemStatus(5, true)">✓ SIM (Conforme)</button>
-                  <button type="button" class="choice-btn" id="btnItem5Nao" onclick="setItemStatus(5, false)">✕ NÃO (Crítico)</button>
+                  <button type="button" class="choice-btn" id="btnItem5Nao" onclick="setItemStatus(5, false)">✕ NÃO</button>
                 </div>
               </div>
 
