@@ -261,7 +261,9 @@ def main():
         extra_attrs=[
             str_attr("opsul_categoria", "Categoria da Base", 50, "None", "Tipo/Prefixo da Base (BA, RA, AR, AI, DE, BE, etc.)"),
             str_attr("opsul_descricao", "Descrição", 150, "None", "Descrição da Base Operacional"),
-            bool_attr("opsul_ativo", "Ativo", True, "None", "Base ativa para seleção no formulário")
+            bool_attr("opsul_ativo", "Ativo", True, "None", "Base ativa para seleção no formulário"),
+            bool_attr("opsul_alerta_teams_ativo", "Alerta de Desvio no Teams Ativo?", False, "None", "Indica se desvios na Blitz de SMS desta base devem disparar aviso automático no Microsoft Teams"),
+            str_attr("opsul_destinatarios_teams", "Destinatário / Grupo Teams (ID ou E-mails)", 500, "None", "Conversation ID do grupo do Microsoft Teams (ex.: 19:...@thread.v2) ou e-mails para alerta de desvio")
         ]
     )
 
@@ -366,6 +368,17 @@ def main():
 
     print("Publishing customizations via PublishAllXml...")
     dv_request("POST", "PublishAllXml", {})
+
+    # 6. Parametrizar BAERI com alerta Teams ativo para o grupo 'Blitz SSMA BAERI'
+    baeri_res = dv_request("GET", "opsul_bases?$filter=opsul_sigla eq 'BAERI'&$select=opsul_baseid,opsul_sigla")
+    if baeri_res.get("value"):
+        baeri_id = baeri_res["value"][0]["opsul_baseid"]
+        dv_request("PATCH", f"opsul_bases({baeri_id})", {
+            "opsul_alerta_teams_ativo": True,
+            "opsul_destinatarios_teams": "19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2"
+        })
+        print(f"Configured BAERI ({baeri_id}) -> opsul_alerta_teams_ativo=True, group=19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2 (Blitz SSMA BAERI)!")
+
     print("ALL DONE! OPER_OPSUL schema created and published successfully!")
 
 if __name__ == "__main__":

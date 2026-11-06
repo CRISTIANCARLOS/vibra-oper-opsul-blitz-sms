@@ -4,7 +4,7 @@
 **Publisher:** `OPER_OPSUL Vibra Energia` (`oper_opsul_publisher`, prefixo `opsul_`)  
 **Ambiente Power Platform:** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3`)  
 **Organização Dataverse:** `https://orgd15f46d4.crm2.dynamics.com`  
-**Versão:** `v1.3.0` (`2026-11-06`)
+**Versão:** `v1.4.0` (`2026-11-06`)
 
 ---
 
@@ -29,6 +29,8 @@ erDiagram
         string opsul_sigla PK "Sigla da Base (204 bases)"
         string opsul_categoria "BA / RA / AR / AI / DE / BE"
         string opsul_descricao "Descrição"
+        boolean opsul_alerta_teams_ativo "Alerta de Desvio no Teams Ativo? (BAERI = true)"
+        string opsul_destinatarios_teams "ID do Grupo Teams (ex.: Blitz SSMA BAERI)"
         boolean opsul_ativo "Status Ativo"
     }
     opsul_responsavel {
@@ -81,8 +83,11 @@ Tabela criada para armazenar os usuários da Regional OPSUL que farão login via
 | **Wedson Pereira da Silva** | `wedson@vibraenergia.com.br` | `19f80cc5-873f-4aa3-afea-46e92de2bfa2` | Operação Regional Sul e Sudeste | Gestor Regional OPSUL | `true` |
 | **Ana Claudia Camargos Sales** | `anasales@vibraenergia.com.br` | `a57b45d7-0126-4f0a-8c45-f3a65e7161d7` | Operação Regional Sul e Sudeste | Gestora Regional OPSUL | `true` |
 
-### 2.2. `opsul_base` (`opsul_bases`) — Catálogo de Bases Operacionais (204 siglas)
-Contém todas as siglas operacionais deduplicadas (`AIBET`, `AIÇAI`, `AICAMP`, `BACUB`, `BAERI`, `BAVAP`, `RACWB`, `GEI - Gerência Industrial`, `SEDE`, etc.) classificadas automaticamente por tipo operacional.
+### 2.2. `opsul_base` (`opsul_bases`) — Catálogo de Bases Operacionais (204 siglas) & Parametrização de Alertas no Teams
+Contém todas as siglas operacionais deduplicadas (`AIBET`, `AIÇAI`, `AICAMP`, `BACUB`, `BAERI`, `BAVAP`, `RACWB`, `GEI - Gerência Industrial`, `SEDE`, etc.) classificadas automaticamente por tipo operacional, além das colunas de governança de notificações de desvios no Microsoft Teams:
+- `opsul_alerta_teams_ativo` (`Boolean`): Habilita o disparo automático de aviso no Teams sempre que uma Blitz registrada na base possuir **1 ou mais desvios (não conformidades)** nos Itens 01 a 05.
+- `opsul_destinatarios_teams` (`String(500)`): ID da conversa/grupo no Microsoft Teams que recebe o aviso.
+- **Unidade Piloto Ativa (`v1.4.0`):** **`BAERI`** (`45684e05-47d9-f111-84e8-e4fade0322c2`) configurada com `opsul_alerta_teams_ativo = true` e `opsul_destinatarios_teams = "19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2"` (grupo **`Blitz SSMA BAERI`**). O aviso é enviado como Adaptive Card v1.4 puramente informativo (**sem botões de ação**).
 
 ### 2.3. `opsul_responsavel` (`opsul_responsavels`) — Catálogo de Responsáveis pela Blitz (372 registros) & Operação em Tablets Compartilhados
 Implementa a regra **"escreve o nome uma vez, depois escolhe na lista"**, combinada com **Login Corporativo Vibra SSO**:

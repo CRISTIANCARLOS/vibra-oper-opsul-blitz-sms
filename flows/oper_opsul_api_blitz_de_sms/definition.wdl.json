@@ -389,6 +389,97 @@
         ]
       }
     },
+    "Compor_Resumo_Desvios_Blitz": {
+      "type": "Compose",
+      "inputs": {
+        "TemDesvio": "@or(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false))",
+        "QtdDesvios": "@add(add(add(add(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), 1, 0), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), 1, 0))",
+        "QtdFotos": "@add(add(add(add(if(not(empty(triggerBody()?['foto_item1_base64'])), 1, 0), if(not(empty(triggerBody()?['foto_item2_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item3_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item4_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item5_base64'])), 1, 0))",
+        "DetalhesDesvios": "@concat(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), concat('• ITEM 01 (EPIs): ', coalesce(triggerBody()?['qual_epi_inapropriado'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item1'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), concat('• ITEM 02 (Veículo/Peças): ', coalesce(triggerBody()?['qual_peca_nao_conforme'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item2'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), concat('• ITEM 03 (Tanque): ', coalesce(triggerBody()?['obs_item3'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), concat('• ITEM 04 (Aterramento/Overfill): ', coalesce(triggerBody()?['obs_item4'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), concat('• ITEM 05 (Chave Geral): ', coalesce(triggerBody()?['obs_item5'], '-'), ' '), ''), if(not(empty(triggerBody()?['observacao_geral'])), concat('• Obs Geral: ', triggerBody()?['observacao_geral']), ''))"
+      },
+      "runAfter": {
+        "Cond_Foto_Item5": [
+          "Succeeded",
+          "Skipped",
+          "Failed"
+        ]
+      }
+    },
+    "Obter_Config_Base_Teams": {
+      "type": "OpenApiConnection",
+      "inputs": {
+        "host": {
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+          "connectionName": "shared_commondataserviceforapps",
+          "operationId": "ListRecords"
+        },
+        "parameters": {
+          "entityName": "opsul_bases",
+          "$filter": "opsul_sigla eq '@{coalesce(triggerBody()?['base'], '')}' and opsul_alerta_teams_ativo eq true",
+          "$top": 1
+        }
+      },
+      "runAfter": {
+        "Compor_Resumo_Desvios_Blitz": [
+          "Succeeded"
+        ]
+      }
+    },
+    "Cond_Notificar_Desvio_BAERI_Teams": {
+      "type": "If",
+      "expression": {
+        "and": [
+          {
+            "greater": [
+              "@length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]')))",
+              0
+            ]
+          },
+          {
+            "equals": [
+              "@outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio']",
+              true
+            ]
+          }
+        ]
+      },
+      "actions": {
+        "Disparar_Aviso_Teams_BAERI": {
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "https://898c553e12ffe6c68b11bc7586165a.03.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/02/workflows/216909107c754ae999d7732dccd39944/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qROhXeWddZ5cnDYlUNn4yAFEK7xLaRzJNbBaRZxUxbQ",
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": {
+              "group_chat_id": "@coalesce(first(outputs('Obter_Config_Base_Teams')?['body/value'])?['opsul_destinatarios_teams'], '19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2')",
+              "protocolo": "@outputs('Compose_Protocolo')",
+              "data": "@coalesce(triggerBody()?['data'], formatDateTime(utcNow(), 'yyyy-MM-dd'))",
+              "base": "@coalesce(triggerBody()?['base'], 'BAERI')",
+              "placa_ct": "@coalesce(triggerBody()?['placa_ct'], '-')",
+              "cif_fob": "@coalesce(triggerBody()?['cif_fob'], '-')",
+              "transportadora": "@coalesce(triggerBody()?['transportadora'], '-')",
+              "responsavel_nome": "@coalesce(triggerBody()?['responsavel_nome'], 'Não Informado')",
+              "responsavel_email": "@coalesce(triggerBody()?['responsavel_email'], '-')",
+              "qtd_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['QtdDesvios']",
+              "qtd_fotos": "@outputs('Compor_Resumo_Desvios_Blitz')?['QtdFotos']",
+              "detalhes_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['DetalhesDesvios']"
+            }
+          },
+          "runAfter": {}
+        }
+      },
+      "else": {
+        "actions": {}
+      },
+      "runAfter": {
+        "Obter_Config_Base_Teams": [
+          "Succeeded",
+          "Failed"
+        ]
+      }
+    },
     "Response_OK": {
       "type": "Response",
       "kind": "Http",
@@ -408,11 +499,12 @@
           "responsavel_nome": "@{triggerBody()?['responsavel_nome']}",
           "responsavel_email": "@{triggerBody()?['responsavel_email']}",
           "placa_ct": "@{triggerBody()?['placa_ct']}",
+          "notificado_teams": "@and(greater(length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]'))), 0), equals(outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio'], true))",
           "solution": "OPER_OPSUL"
         }
       },
       "runAfter": {
-        "Cond_Foto_Item5": [
+        "Cond_Notificar_Desvio_BAERI_Teams": [
           "Succeeded",
           "Skipped",
           "Failed"

@@ -21,7 +21,28 @@
       "entitySetName": "opsul_bases",
       "displayName": "Base Operacional OPSUL",
       "recordsCount": 204,
-      "primaryNameAttribute": "opsul_sigla"
+      "primaryNameAttribute": "opsul_sigla",
+      "teamsAlertAttributes": [
+        {
+          "logicalName": "opsul_alerta_teams_ativo",
+          "displayName": "Alerta Teams Ativo?",
+          "type": "Boolean"
+        },
+        {
+          "logicalName": "opsul_destinatarios_teams",
+          "displayName": "Destinatários / Grupo do Alerta no Teams",
+          "type": "String(500)"
+        }
+      ],
+      "activeTeamsAlertBases": [
+        {
+          "opsul_sigla": "BAERI",
+          "opsul_baseid": "45684e05-47d9-f111-84e8-e4fade0322c2",
+          "opsul_alerta_teams_ativo": true,
+          "opsul_destinatarios_teams": "19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2",
+          "groupChatTopic": "Blitz SSMA BAERI"
+        }
+      ]
     },
     {
       "logicalName": "opsul_responsavel",

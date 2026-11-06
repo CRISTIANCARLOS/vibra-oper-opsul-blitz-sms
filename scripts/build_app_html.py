@@ -2334,8 +2334,9 @@ def main():
 
         const banner = document.getElementById("successBanner");
         const protoTxt = apiRes.protocolo ? `Protocolo: ${{apiRes.protocolo}} | ` : "";
+        const teamsTxt = apiRes.notificado_teams ? ` | Alerta enviado ao grupo Teams (Blitz SSMA BAERI)` : "";
         document.getElementById("successDetails").textContent =
-          `${{protoTxt}}Base: ${{payload.base}} | Placa CT: ${{payload.placa_ct}} | Transportadora: ${{payload.transportadora}} | Responsável: ${{payload.responsavel_nome}} (${{currentAuthUser.email || 'SSO Vibra'}}) | Fotos salvas no Dataverse: ${{totalPhotos}}`;
+          `${{protoTxt}}Base: ${{payload.base}} | Placa CT: ${{payload.placa_ct}} | Transportadora: ${{payload.transportadora}} | Responsável: ${{payload.responsavel_nome}} (${{currentAuthUser.email || 'SSO Vibra'}}) | Fotos salvas no Dataverse: ${{totalPhotos}}${{teamsTxt}}`;
         banner.classList.add("visible");
         window.scrollTo({{ top: 0, behavior: "smooth" }});
       }} catch (err) {{

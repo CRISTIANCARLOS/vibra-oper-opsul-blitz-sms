@@ -1,0 +1,12 @@
+{
+  "shared_teams": {
+    "runtimeSource": "embedded",
+    "connection": {
+      "name": "shared-teams-cf39a891-ddf6-442d-b7b2-00885b7377c5",
+      "connectionReferenceLogicalName": "new_sharedteams_c3243"
+    },
+    "api": {
+      "name": "shared_teams"
+    }
+  }
+}

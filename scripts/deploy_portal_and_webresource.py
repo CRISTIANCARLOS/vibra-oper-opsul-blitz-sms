@@ -13,6 +13,12 @@ ssl.SSLContext.wrap_socket = lambda self, *a, **kw: (setattr(self, "verify_flags
 ORG_URL = "https://orgd15f46d4.crm2.dynamics.com"
 API_URL = f"{ORG_URL}/api/data/v9.2"
 ENV_ID = "4a9ba077-4920-ea16-ae45-293f56eb85e3"
+
+TEAMS_ORG_URL = "https://org165415fc.crm.dynamics.com"
+TEAMS_API_URL = f"{TEAMS_ORG_URL}/api/data/v9.2"
+TEAMS_ENV_ID = "898c553e-12ff-e6c6-8b11-bc7586165a03"
+BAERI_GROUP_CHAT_ID = "19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2"
+
 REPO_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCRATCH_DIR = r"C:\Users\CE9X\.gemini\antigravity-cli\brain\8cae6e32-993e-4789-bd1b-881b43fbd9e1\scratch"
 
@@ -33,6 +39,7 @@ def get_token(resource):
     return json.loads(res.stdout)["accessToken"]
 
 DV_TOKEN = get_token(ORG_URL + "/")
+TEAMS_DV_TOKEN = get_token(TEAMS_ORG_URL + "/")
 FLOW_TOKEN = get_token("https://service.flow.microsoft.com/")
 
 def dv_req(method, path, body=None, extra_headers=None):
@@ -76,7 +83,222 @@ def ensure_dv_conn_ref():
     })
     return logical_name
 
-def build_api_flow_clientdata(conn_ref_logical):
+def teams_dv_req(method, path, body=None, extra_headers=None):
+    url = f"{TEAMS_API_URL}/{path}" if not path.startswith("http") else path
+    headers = {
+        "Authorization": f"Bearer {TEAMS_DV_TOKEN}",
+        "Accept": "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+        "OData-MaxVersion": "4.0",
+        "OData-Version": "4.0"
+    }
+    if extra_headers:
+        headers.update(extra_headers)
+    r = requests.request(method, url, json=body, headers=headers, verify=False, timeout=120)
+    if not r.ok:
+        print(f"TEAMS DV HTTP {r.status_code} on {method} {path}: {r.text[:800]}")
+        r.raise_for_status()
+    return r.json() if r.text else {}
+
+def ensure_teams_alert_flow():
+    flow_name = "OPER_OPSUL - Alerta de Desvio Blitz de SMS no Teams (BAERI)"
+    card_dict = {
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "type": "AdaptiveCard",
+        "version": "1.4",
+        "body": [
+            {
+                "type": "TextBlock",
+                "text": "🚨 ALERTA DE DESVIO EM BLITZ DE SMS — BASE @{coalesce(triggerBody()?['base'], 'BAERI')}",
+                "weight": "Bolder",
+                "size": "Medium",
+                "color": "Attention",
+                "wrap": True
+            },
+            {
+                "type": "TextBlock",
+                "text": "Foi registrada uma Blitz de SMS na unidade **@{coalesce(triggerBody()?['base'], 'BAERI')}** com item(ns) não conforme(s) no checklist crítico.",
+                "wrap": True
+            },
+            {
+                "type": "FactSet",
+                "facts": [
+                    {"title": "Protocolo:", "value": "@{coalesce(triggerBody()?['protocolo'], '-')}"},
+                    {"title": "Data da Blitz:", "value": "@{coalesce(triggerBody()?['data'], '-')}"},
+                    {"title": "Base Operacional:", "value": "@{coalesce(triggerBody()?['base'], 'BAERI')}"},
+                    {"title": "Placa CT / Frete:", "value": "@{coalesce(triggerBody()?['placa_ct'], '-')} (@{coalesce(triggerBody()?['cif_fob'], '-')})"},
+                    {"title": "Transportadora:", "value": "@{outputs('Sanitizar_Campos_Livres')?['Transportadora']}"},
+                    {"title": "Responsável Blitz:", "value": "@{outputs('Sanitizar_Campos_Livres')?['Responsavel']}"},
+                    {"title": "Sessão SSO (Tablet):", "value": "@{coalesce(triggerBody()?['responsavel_email'], '-')}"},
+                    {"title": "Itens com Desvio:", "value": "@{string(coalesce(triggerBody()?['qtd_desvios'], 1))} de 5"},
+                    {"title": "Fotos Anexadas:", "value": "@{string(coalesce(triggerBody()?['qtd_fotos'], 0))} foto(s) no Dataverse"}
+                ]
+            },
+            {
+                "type": "Container",
+                "style": "attention",
+                "items": [
+                    {
+                        "type": "TextBlock",
+                        "text": "⚠️ **Detalhamento dos Desvios Apontados no Checklist:**",
+                        "weight": "Bolder",
+                        "wrap": True
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "@{outputs('Sanitizar_Campos_Livres')?['DetalhesDesvios']}",
+                        "wrap": True
+                    }
+                ]
+            }
+        ]
+    }
+    card_json_str = json.dumps(card_dict, ensure_ascii=False)
+
+    clientdata = {
+        "properties": {
+            "connectionReferences": {
+                "shared_teams": {
+                    "runtimeSource": "embedded",
+                    "connection": {
+                        "name": "shared-teams-cf39a891-ddf6-442d-b7b2-00885b7377c5",
+                        "connectionReferenceLogicalName": "new_sharedteams_c3243"
+                    },
+                    "api": {
+                        "name": "shared_teams"
+                    }
+                }
+            },
+            "definition": {
+                "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                    "$connections": {"defaultValue": {}, "type": "Object"},
+                    "$authentication": {"defaultValue": {}, "type": "SecureObject"}
+                },
+                "triggers": {
+                    "manual": {
+                        "type": "Request",
+                        "kind": "Http",
+                        "inputs": {
+                            "triggerAuthenticationType": "All",
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "group_chat_id": {"type": "string"},
+                                    "protocolo": {"type": "string"},
+                                    "data": {"type": "string"},
+                                    "base": {"type": "string"},
+                                    "placa_ct": {"type": "string"},
+                                    "cif_fob": {"type": "string"},
+                                    "transportadora": {"type": "string"},
+                                    "responsavel_nome": {"type": "string"},
+                                    "responsavel_email": {"type": "string"},
+                                    "qtd_desvios": {"type": "integer"},
+                                    "qtd_fotos": {"type": "integer"},
+                                    "detalhes_desvios": {"type": "string"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "actions": {
+                    "Sanitizar_Campos_Livres": {
+                        "type": "Compose",
+                        "inputs": {
+                            "Transportadora": "@replace(replace(replace(replace(coalesce(triggerBody()?['transportadora'], '-'), '\"', ''), '\\', '/'), '\r', ' '), '\n', ' ')",
+                            "Responsavel": "@replace(replace(replace(replace(coalesce(triggerBody()?['responsavel_nome'], '-'), '\"', ''), '\\', '/'), '\r', ' '), '\n', ' ')",
+                            "DetalhesDesvios": "@replace(replace(replace(replace(coalesce(triggerBody()?['detalhes_desvios'], 'Desvio apontado no checklist.'), '\"', ''), '\\', '/'), '\r', ' '), '\n', ' | ')"
+                        },
+                        "runAfter": {}
+                    },
+                    "Enviar_Aviso_Grupo_Blitz_SSMA_BAERI": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                            "host": {
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                                "connectionName": "shared_teams",
+                                "operationId": "PostCardToConversation"
+                            },
+                            "parameters": {
+                                "poster": "Flow bot",
+                                "location": "Group chat",
+                                "body/recipient": f"@coalesce(triggerBody()?['group_chat_id'], '{BAERI_GROUP_CHAT_ID}')",
+                                "body/messageBody": card_json_str
+                            }
+                        },
+                        "runAfter": {
+                            "Sanitizar_Campos_Livres": ["Succeeded"]
+                        }
+                    },
+                    "Response_Teams_OK": {
+                        "type": "Response",
+                        "kind": "Http",
+                        "inputs": {
+                            "statusCode": 200,
+                            "headers": {"Content-Type": "application/json; charset=utf-8"},
+                            "body": {
+                                "ok": True,
+                                "group_chat": "Blitz SSMA BAERI",
+                                "group_chat_id": f"@{{coalesce(triggerBody()?['group_chat_id'], '{BAERI_GROUP_CHAT_ID}')}}"
+                            }
+                        },
+                        "runAfter": {
+                            "Enviar_Aviso_Grupo_Blitz_SSMA_BAERI": ["Succeeded"]
+                        }
+                    }
+                },
+                "outputs": {}
+            }
+        },
+        "schemaVersion": "1.0.0.0"
+    }
+
+    existing = teams_dv_req("GET", f"workflows?$filter=name eq '{flow_name}' and category eq 5&$select=workflowid,name")
+    if existing.get("value"):
+        wf_id = existing["value"][0]["workflowid"]
+        print(f"Updating existing Teams Alert Flow {flow_name} ({wf_id})...")
+        teams_dv_req("PATCH", f"workflows({wf_id})", {"clientdata": json.dumps(clientdata)})
+    else:
+        print(f"Creating Teams Alert Flow {flow_name}...")
+        res = teams_dv_req("POST", "workflows", {
+            "name": flow_name,
+            "category": 5,
+            "type": 1,
+            "modernflowtype": 0,
+            "primaryentity": "none",
+            "clientdata": json.dumps(clientdata)
+        }, {"Prefer": "return=representation"})
+        wf_id = res["workflowid"]
+
+    teams_dv_req("POST", "PublishXml", {
+        "ParameterXml": f"<importexportxml><workflows><workflow>{wf_id}</workflow></workflows></importexportxml>"
+    })
+    teams_dv_req("PATCH", f"workflows({wf_id})", {"statecode": 1, "statuscode": 2})
+
+    f_headers = {"Authorization": f"Bearer {FLOW_TOKEN}", "Accept": "application/json"}
+    flows_res = requests.get(
+        f"https://api.flow.microsoft.com/providers/Microsoft.ProcessSimple/environments/{TEAMS_ENV_ID}/flows?api-version=2016-11-01",
+        headers=f_headers, verify=False, timeout=60
+    ).json()
+    flow_ps_name = wf_id
+    for fl in flows_res.get("value", []):
+        if fl.get("properties", {}).get("workflowEntityId", "").lower() == wf_id.lower() or fl.get("properties", {}).get("displayName") == flow_name:
+            flow_ps_name = fl["name"]
+            break
+
+    cb_resp = requests.post(
+        f"https://api.flow.microsoft.com/providers/Microsoft.ProcessSimple/environments/{TEAMS_ENV_ID}/flows/{flow_ps_name}/triggers/manual/listCallbackUrl?api-version=2016-11-01",
+        headers=f_headers,
+        verify=False, timeout=60
+    )
+    cb_resp.raise_for_status()
+    cb_json = cb_resp.json()
+    cb_url = (cb_json.get("response") or {}).get("value") or cb_json.get("value")
+    print(f"Teams Alert Flow {wf_id} (ps={flow_ps_name}) active! Callback URL resolved.")
+    return wf_id, cb_url
+
+def build_api_flow_clientdata(conn_ref_logical, teams_alert_url):
     photo_conditions = {}
     for i in range(1, 6):
         prev_dep = "Criar_Registro_Blitz_Dataverse" if i == 1 else f"Cond_Foto_Item{i-1}"
@@ -166,6 +388,86 @@ def build_api_flow_clientdata(conn_ref_logical):
         }
     }
     actions.update(photo_conditions)
+    actions["Compor_Resumo_Desvios_Blitz"] = {
+        "type": "Compose",
+        "inputs": {
+            "TemDesvio": "@or(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false))",
+            "QtdDesvios": "@add(add(add(add(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), 1, 0), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), 1, 0))",
+            "QtdFotos": "@add(add(add(add(if(not(empty(triggerBody()?['foto_item1_base64'])), 1, 0), if(not(empty(triggerBody()?['foto_item2_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item3_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item4_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item5_base64'])), 1, 0))",
+            "DetalhesDesvios": "@concat(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), concat('• ITEM 01 (EPIs): ', coalesce(triggerBody()?['qual_epi_inapropriado'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item1'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), concat('• ITEM 02 (Veículo/Peças): ', coalesce(triggerBody()?['qual_peca_nao_conforme'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item2'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), concat('• ITEM 03 (Tanque): ', coalesce(triggerBody()?['obs_item3'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), concat('• ITEM 04 (Aterramento/Overfill): ', coalesce(triggerBody()?['obs_item4'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), concat('• ITEM 05 (Chave Geral): ', coalesce(triggerBody()?['obs_item5'], '-'), ' '), ''), if(not(empty(triggerBody()?['observacao_geral'])), concat('• Obs Geral: ', triggerBody()?['observacao_geral']), ''))"
+        },
+        "runAfter": {
+            "Cond_Foto_Item5": ["Succeeded", "Skipped", "Failed"]
+        }
+    }
+    actions["Obter_Config_Base_Teams"] = {
+        "type": "OpenApiConnection",
+        "inputs": {
+            "host": {
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                "connectionName": "shared_commondataserviceforapps",
+                "operationId": "ListRecords"
+            },
+            "parameters": {
+                "entityName": "opsul_bases",
+                "$filter": "opsul_sigla eq '@{coalesce(triggerBody()?['base'], '')}' and opsul_alerta_teams_ativo eq true",
+                "$top": 1
+            }
+        },
+        "runAfter": {
+            "Compor_Resumo_Desvios_Blitz": ["Succeeded"]
+        }
+    }
+    actions["Cond_Notificar_Desvio_BAERI_Teams"] = {
+        "type": "If",
+        "expression": {
+            "and": [
+                {
+                    "greater": [
+                        "@length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]')))",
+                        0
+                    ]
+                },
+                {
+                    "equals": [
+                        "@outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio']",
+                        True
+                    ]
+                }
+            ]
+        },
+        "actions": {
+            "Disparar_Aviso_Teams_BAERI": {
+                "type": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "uri": teams_alert_url,
+                    "headers": {"Content-Type": "application/json; charset=utf-8"},
+                    "body": {
+                        "group_chat_id": f"@coalesce(first(outputs('Obter_Config_Base_Teams')?['body/value'])?['opsul_destinatarios_teams'], '{BAERI_GROUP_CHAT_ID}')",
+                        "protocolo": "@outputs('Compose_Protocolo')",
+                        "data": "@coalesce(triggerBody()?['data'], formatDateTime(utcNow(), 'yyyy-MM-dd'))",
+                        "base": "@coalesce(triggerBody()?['base'], 'BAERI')",
+                        "placa_ct": "@coalesce(triggerBody()?['placa_ct'], '-')",
+                        "cif_fob": "@coalesce(triggerBody()?['cif_fob'], '-')",
+                        "transportadora": "@coalesce(triggerBody()?['transportadora'], '-')",
+                        "responsavel_nome": "@coalesce(triggerBody()?['responsavel_nome'], 'Não Informado')",
+                        "responsavel_email": "@coalesce(triggerBody()?['responsavel_email'], '-')",
+                        "qtd_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['QtdDesvios']",
+                        "qtd_fotos": "@outputs('Compor_Resumo_Desvios_Blitz')?['QtdFotos']",
+                        "detalhes_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['DetalhesDesvios']"
+                    }
+                },
+                "runAfter": {}
+            }
+        },
+        "else": {
+            "actions": {}
+        },
+        "runAfter": {
+            "Obter_Config_Base_Teams": ["Succeeded", "Failed"]
+        }
+    }
     actions["Response_OK"] = {
         "type": "Response",
         "kind": "Http",
@@ -185,11 +487,12 @@ def build_api_flow_clientdata(conn_ref_logical):
                 "responsavel_nome": "@{triggerBody()?['responsavel_nome']}",
                 "responsavel_email": "@{triggerBody()?['responsavel_email']}",
                 "placa_ct": "@{triggerBody()?['placa_ct']}",
+                "notificado_teams": "@and(greater(length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]'))), 0), equals(outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio'], true))",
                 "solution": "OPER_OPSUL"
             }
         },
         "runAfter": {
-            "Cond_Foto_Item5": ["Succeeded", "Skipped", "Failed"]
+            "Cond_Notificar_Desvio_BAERI_Teams": ["Succeeded", "Skipped", "Failed"]
         }
     }
 
@@ -269,10 +572,11 @@ def build_api_flow_clientdata(conn_ref_logical):
 
 def main():
     conn_ref_logical = ensure_dv_conn_ref()
+    teams_wf_id, teams_alert_url = ensure_teams_alert_flow()
 
     # 1. Update API Flow in Dataverse
     print(f"Updating API Flow {API_FLOW_ID}...")
-    api_clientdata = build_api_flow_clientdata(conn_ref_logical)
+    api_clientdata = build_api_flow_clientdata(conn_ref_logical, teams_alert_url)
     dv_req("PATCH", f"workflows({API_FLOW_ID})", {"clientdata": json.dumps(api_clientdata)})
     dv_req("POST", "PublishXml", {
         "ParameterXml": f"<importexportxml><workflows><workflow>{API_FLOW_ID}</workflow></workflows></importexportxml>"
@@ -379,8 +683,12 @@ def main():
     print(f"Published and Activated Portal Flow {PORTAL_FLOW_ID}!")
 
     # 3. Export updated snapshots into repo/flows/
-    for wf_id, slug in [(PORTAL_FLOW_ID, "oper_opsul_portal_web_blitz_de_sms"), (API_FLOW_ID, "oper_opsul_api_blitz_de_sms")]:
-        wf_data = dv_req("GET", f"workflows({wf_id})?$select=workflowid,name,statecode,statuscode,clientdata,modifiedon,createdon")
+    for wf_id, slug, req_fn in [
+        (PORTAL_FLOW_ID, "oper_opsul_portal_web_blitz_de_sms", dv_req),
+        (API_FLOW_ID, "oper_opsul_api_blitz_de_sms", dv_req),
+        (teams_wf_id, "oper_opsul_alerta_desvio_blitz_teams_baeri", teams_dv_req)
+    ]:
+        wf_data = req_fn("GET", f"workflows({wf_id})?$select=workflowid,name,statecode,statuscode,clientdata,modifiedon,createdon")
         cd = json.loads(wf_data.get("clientdata", "{}"))
         flow_dir = os.path.join(REPO_DIR, "flows", slug)
         os.makedirs(flow_dir, exist_ok=True)

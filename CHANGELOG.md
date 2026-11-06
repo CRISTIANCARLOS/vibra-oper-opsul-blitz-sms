@@ -1,5 +1,13 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.4.0] — 2026-11-06
+### Adicionado
+- **Alerta Automático de Desvios no Microsoft Teams para a Unidade `BAERI` (Grupo `Blitz SSMA BAERI`):**
+  - Provisionamento das colunas `opsul_alerta_teams_ativo` (`Boolean`) e `opsul_destinatarios_teams` (`String(500)`) na tabela `opsul_base` (`opsul_bases`) no Microsoft Dataverse, permitindo habilitar ou desabilitar alertas por base sem alterar código.
+  - Ativação inicial na base **`BAERI`** (`45684e05-47d9-f111-84e8-e4fade0322c2`) apontando para o chat em grupo **`Blitz SSMA BAERI`** (`conversationId`: `19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2`).
+  - Criação e ativação do fluxo [`OPER_OPSUL - Alerta de Desvio Blitz de SMS no Teams (BAERI)`](./flows/oper_opsul_alerta_desvio_blitz_teams_baeri/definition.wdl.json) (`d5c4bed7-10da-f111-84e8-000d3a8cdf8c` no ambiente `898c553e-12ff-e6c6-8b11-bc7586165a03`), utilizando a conexão `shared_teams` (`new_sharedteams_c3243`, ação `PostCardToConversation`, `location: "Group chat"`, `poster: "Flow bot"`) para publicar um **Adaptive Card v1.4 puramente informativo (sem botões de ação)** contendo protocolo, data, base, placa CT/frete, transportadora, responsável pela Blitz, sessão SSO do tablet, total de itens reprovados, fotos anexadas e detalhamento de todos os desvios apontados.
+  - Evolução do fluxo [`OPER_OPSUL - API Blitz de SMS`](./flows/oper_opsul_api_blitz_de_sms/definition.wdl.json) (`592191f7-47d9-f111-84e8-e4fade0322c2`) com as etapas `Compor_Resumo_Desvios_Blitz`, `Obter_Config_Base_Teams` e `Cond_Notificar_Desvio_BAERI_Teams` -> `Disparar_Aviso_Teams_BAERI`.
+
 ## [v1.3.0] — 2026-11-06
 ### Alterado
 - **Exigência de Login Corporativo no Ambiente Vibra (Microsoft Entra ID / Dataverse SSO):**
