@@ -123,11 +123,16 @@
   },
   "actions": {
     "Compose_Protocolo": {
+      "runAfter": {},
       "type": "Compose",
-      "inputs": "@concat('BLITZ-', coalesce(triggerBody()?['base'], 'OPSUL'), '-', toUpper(substring(guid(), 0, 8)))",
-      "runAfter": {}
+      "inputs": "@concat('BLITZ-', coalesce(triggerBody()?['base'], 'OPSUL'), '-', toUpper(substring(guid(), 0, 8)))"
     },
     "Criar_Registro_Blitz_Dataverse": {
+      "runAfter": {
+        "Compose_Protocolo": [
+          "Succeeded"
+        ]
+      },
       "type": "OpenApiConnection",
       "inputs": {
         "host": {
@@ -159,29 +164,12 @@
           "item/opsul_obs_item5": "@coalesce(triggerBody()?['obs_item5'], '')",
           "item/opsul_observacao_geral": "@coalesce(triggerBody()?['observacao_geral'], '')"
         }
-      },
-      "runAfter": {
-        "Compose_Protocolo": [
-          "Succeeded"
-        ]
       }
     },
     "Cond_Foto_Item1": {
-      "type": "If",
-      "expression": {
-        "and": [
-          {
-            "not": {
-              "equals": [
-                "@empty(triggerBody()?['foto_item1_base64'])",
-                true
-              ]
-            }
-          }
-        ]
-      },
       "actions": {
         "Upload_Foto_Item1": {
+          "runAfter": {},
           "type": "OpenApiConnection",
           "inputs": {
             "host": {
@@ -196,35 +184,35 @@
               "item": "@base64ToBinary(triggerBody()?['foto_item1_base64'])",
               "x-ms-file-name": "@coalesce(triggerBody()?['foto_item1_nome'], 'blitz_item01.jpg')"
             }
-          },
-          "runAfter": {}
+          }
         }
-      },
-      "else": {
-        "actions": {}
       },
       "runAfter": {
         "Criar_Registro_Blitz_Dataverse": [
           "Succeeded"
         ]
-      }
-    },
-    "Cond_Foto_Item2": {
-      "type": "If",
+      },
+      "else": {
+        "actions": {}
+      },
       "expression": {
         "and": [
           {
             "not": {
               "equals": [
-                "@empty(triggerBody()?['foto_item2_base64'])",
+                "@empty(triggerBody()?['foto_item1_base64'])",
                 true
               ]
             }
           }
         ]
       },
+      "type": "If"
+    },
+    "Cond_Foto_Item2": {
       "actions": {
         "Upload_Foto_Item2": {
+          "runAfter": {},
           "type": "OpenApiConnection",
           "inputs": {
             "host": {
@@ -239,12 +227,8 @@
               "item": "@base64ToBinary(triggerBody()?['foto_item2_base64'])",
               "x-ms-file-name": "@coalesce(triggerBody()?['foto_item2_nome'], 'blitz_item02.jpg')"
             }
-          },
-          "runAfter": {}
+          }
         }
-      },
-      "else": {
-        "actions": {}
       },
       "runAfter": {
         "Cond_Foto_Item1": [
@@ -252,24 +236,28 @@
           "Skipped",
           "Failed"
         ]
-      }
-    },
-    "Cond_Foto_Item3": {
-      "type": "If",
+      },
+      "else": {
+        "actions": {}
+      },
       "expression": {
         "and": [
           {
             "not": {
               "equals": [
-                "@empty(triggerBody()?['foto_item3_base64'])",
+                "@empty(triggerBody()?['foto_item2_base64'])",
                 true
               ]
             }
           }
         ]
       },
+      "type": "If"
+    },
+    "Cond_Foto_Item3": {
       "actions": {
         "Upload_Foto_Item3": {
+          "runAfter": {},
           "type": "OpenApiConnection",
           "inputs": {
             "host": {
@@ -284,12 +272,8 @@
               "item": "@base64ToBinary(triggerBody()?['foto_item3_base64'])",
               "x-ms-file-name": "@coalesce(triggerBody()?['foto_item3_nome'], 'blitz_item03.jpg')"
             }
-          },
-          "runAfter": {}
+          }
         }
-      },
-      "else": {
-        "actions": {}
       },
       "runAfter": {
         "Cond_Foto_Item2": [
@@ -297,24 +281,28 @@
           "Skipped",
           "Failed"
         ]
-      }
-    },
-    "Cond_Foto_Item4": {
-      "type": "If",
+      },
+      "else": {
+        "actions": {}
+      },
       "expression": {
         "and": [
           {
             "not": {
               "equals": [
-                "@empty(triggerBody()?['foto_item4_base64'])",
+                "@empty(triggerBody()?['foto_item3_base64'])",
                 true
               ]
             }
           }
         ]
       },
+      "type": "If"
+    },
+    "Cond_Foto_Item4": {
       "actions": {
         "Upload_Foto_Item4": {
+          "runAfter": {},
           "type": "OpenApiConnection",
           "inputs": {
             "host": {
@@ -329,12 +317,8 @@
               "item": "@base64ToBinary(triggerBody()?['foto_item4_base64'])",
               "x-ms-file-name": "@coalesce(triggerBody()?['foto_item4_nome'], 'blitz_item04.jpg')"
             }
-          },
-          "runAfter": {}
+          }
         }
-      },
-      "else": {
-        "actions": {}
       },
       "runAfter": {
         "Cond_Foto_Item3": [
@@ -342,24 +326,28 @@
           "Skipped",
           "Failed"
         ]
-      }
-    },
-    "Cond_Foto_Item5": {
-      "type": "If",
+      },
+      "else": {
+        "actions": {}
+      },
       "expression": {
         "and": [
           {
             "not": {
               "equals": [
-                "@empty(triggerBody()?['foto_item5_base64'])",
+                "@empty(triggerBody()?['foto_item4_base64'])",
                 true
               ]
             }
           }
         ]
       },
+      "type": "If"
+    },
+    "Cond_Foto_Item5": {
       "actions": {
         "Upload_Foto_Item5": {
+          "runAfter": {},
           "type": "OpenApiConnection",
           "inputs": {
             "host": {
@@ -374,12 +362,8 @@
               "item": "@base64ToBinary(triggerBody()?['foto_item5_base64'])",
               "x-ms-file-name": "@coalesce(triggerBody()?['foto_item5_nome'], 'blitz_item05.jpg')"
             }
-          },
-          "runAfter": {}
+          }
         }
-      },
-      "else": {
-        "actions": {}
       },
       "runAfter": {
         "Cond_Foto_Item4": [
@@ -387,25 +371,47 @@
           "Skipped",
           "Failed"
         ]
-      }
+      },
+      "else": {
+        "actions": {}
+      },
+      "expression": {
+        "and": [
+          {
+            "not": {
+              "equals": [
+                "@empty(triggerBody()?['foto_item5_base64'])",
+                true
+              ]
+            }
+          }
+        ]
+      },
+      "type": "If"
     },
     "Compor_Resumo_Desvios_Blitz": {
-      "type": "Compose",
-      "inputs": {
-        "TemDesvio": "@or(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false))",
-        "QtdDesvios": "@add(add(add(add(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), 1, 0), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), 1, 0))",
-        "QtdFotos": "@add(add(add(add(if(not(empty(triggerBody()?['foto_item1_base64'])), 1, 0), if(not(empty(triggerBody()?['foto_item2_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item3_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item4_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item5_base64'])), 1, 0))",
-        "DetalhesDesvios": "@concat(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), concat('• ITEM 01 (EPIs): ', coalesce(triggerBody()?['qual_epi_inapropriado'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item1'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), concat('• ITEM 02 (Veículo/Peças): ', coalesce(triggerBody()?['qual_peca_nao_conforme'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item2'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), concat('• ITEM 03 (Tanque): ', coalesce(triggerBody()?['obs_item3'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), concat('• ITEM 04 (Aterramento/Overfill): ', coalesce(triggerBody()?['obs_item4'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), concat('• ITEM 05 (Chave Geral): ', coalesce(triggerBody()?['obs_item5'], '-'), ' '), ''), if(not(empty(triggerBody()?['observacao_geral'])), concat('• Obs Geral: ', triggerBody()?['observacao_geral']), ''))"
-      },
       "runAfter": {
         "Cond_Foto_Item5": [
           "Succeeded",
           "Skipped",
           "Failed"
         ]
+      },
+      "type": "Compose",
+      "inputs": {
+        "TemDesvio": "@or(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false))",
+        "QtdDesvios": "@add(add(add(add(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), 1, 0), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), 1, 0)), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), 1, 0))",
+        "QtdFotos": "@add(add(add(add(if(not(empty(triggerBody()?['foto_item1_base64'])), 1, 0), if(not(empty(triggerBody()?['foto_item2_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item3_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item4_base64'])), 1, 0)), if(not(empty(triggerBody()?['foto_item5_base64'])), 1, 0))",
+        "DetalhesDesvios": "@concat(if(equals(coalesce(triggerBody()?['item01_epis_ok'], true), false), concat('• ITEM 01 (EPIs): ', coalesce(triggerBody()?['qual_epi_inapropriado'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item1'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item02_veiculo_ok'], true), false), concat('• ITEM 02 (Veículo/Peças): ', coalesce(triggerBody()?['qual_peca_nao_conforme'], '-'), ' — Obs: ', coalesce(triggerBody()?['obs_item2'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item03_tanque_ok'], true), false), concat('• ITEM 03 (Tanque): ', coalesce(triggerBody()?['obs_item3'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item04_aterramento_ok'], true), false), concat('• ITEM 04 (Aterramento/Overfill): ', coalesce(triggerBody()?['obs_item4'], '-'), ' '), ''), if(equals(coalesce(triggerBody()?['item05_chave_geral_ok'], true), false), concat('• ITEM 05 (Chave Geral): ', coalesce(triggerBody()?['obs_item5'], '-'), ' '), ''), if(not(empty(triggerBody()?['observacao_geral'])), concat('• Obs Geral: ', triggerBody()?['observacao_geral']), ''))",
+        "LinksFotos": "@concat(if(not(empty(triggerBody()?['foto_item1_base64'])), concat('[📷 Foto Item 01 (EPIs)](https://orgd15f46d4.crm2.dynamics.com/api/data/v9.2/opsul_blitzsmses(', outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid'], ')/opsul_foto_item1/$value)  '), ''), if(not(empty(triggerBody()?['foto_item2_base64'])), concat('[📷 Foto Item 02 (Veículo)](https://orgd15f46d4.crm2.dynamics.com/api/data/v9.2/opsul_blitzsmses(', outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid'], ')/opsul_foto_item2/$value)  '), ''), if(not(empty(triggerBody()?['foto_item3_base64'])), concat('[📷 Foto Item 03 (Tanque)](https://orgd15f46d4.crm2.dynamics.com/api/data/v9.2/opsul_blitzsmses(', outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid'], ')/opsul_foto_item3/$value)  '), ''), if(not(empty(triggerBody()?['foto_item4_base64'])), concat('[📷 Foto Item 04 (Aterramento)](https://orgd15f46d4.crm2.dynamics.com/api/data/v9.2/opsul_blitzsmses(', outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid'], ')/opsul_foto_item4/$value)  '), ''), if(not(empty(triggerBody()?['foto_item5_base64'])), concat('[📷 Foto Item 05 (Chave Geral)](https://orgd15f46d4.crm2.dynamics.com/api/data/v9.2/opsul_blitzsmses(', outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid'], ')/opsul_foto_item5/$value)'), ''))"
       }
     },
     "Obter_Config_Base_Teams": {
+      "runAfter": {
+        "Compor_Resumo_Desvios_Blitz": [
+          "Succeeded"
+        ]
+      },
       "type": "OpenApiConnection",
       "inputs": {
         "host": {
@@ -418,33 +424,12 @@
           "$filter": "opsul_sigla eq '@{coalesce(triggerBody()?['base'], '')}' and opsul_alerta_teams_ativo eq true",
           "$top": 1
         }
-      },
-      "runAfter": {
-        "Compor_Resumo_Desvios_Blitz": [
-          "Succeeded"
-        ]
       }
     },
     "Cond_Notificar_Desvio_BAERI_Teams": {
-      "type": "If",
-      "expression": {
-        "and": [
-          {
-            "greater": [
-              "@length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]')))",
-              0
-            ]
-          },
-          {
-            "equals": [
-              "@outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio']",
-              true
-            ]
-          }
-        ]
-      },
       "actions": {
         "Disparar_Aviso_Teams_BAERI": {
+          "runAfter": {},
           "type": "Http",
           "inputs": {
             "method": "POST",
@@ -464,23 +449,48 @@
               "responsavel_email": "@coalesce(triggerBody()?['responsavel_email'], '-')",
               "qtd_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['QtdDesvios']",
               "qtd_fotos": "@outputs('Compor_Resumo_Desvios_Blitz')?['QtdFotos']",
-              "detalhes_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['DetalhesDesvios']"
+              "detalhes_desvios": "@outputs('Compor_Resumo_Desvios_Blitz')?['DetalhesDesvios']",
+              "blitz_id": "@outputs('Criar_Registro_Blitz_Dataverse')?['body/opsul_blitzsmsid']",
+              "links_fotos": "@outputs('Compor_Resumo_Desvios_Blitz')?['LinksFotos']"
             }
-          },
-          "runAfter": {}
+          }
         }
-      },
-      "else": {
-        "actions": {}
       },
       "runAfter": {
         "Obter_Config_Base_Teams": [
           "Succeeded",
           "Failed"
         ]
-      }
+      },
+      "else": {
+        "actions": {}
+      },
+      "expression": {
+        "and": [
+          {
+            "greater": [
+              "@length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]')))",
+              0
+            ]
+          },
+          {
+            "equals": [
+              "@outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio']",
+              true
+            ]
+          }
+        ]
+      },
+      "type": "If"
     },
     "Response_OK": {
+      "runAfter": {
+        "Cond_Notificar_Desvio_BAERI_Teams": [
+          "Succeeded",
+          "Skipped",
+          "Failed"
+        ]
+      },
       "type": "Response",
       "kind": "Http",
       "inputs": {
@@ -502,13 +512,6 @@
           "notificado_teams": "@and(greater(length(coalesce(outputs('Obter_Config_Base_Teams')?['body/value'], json('[]'))), 0), equals(outputs('Compor_Resumo_Desvios_Blitz')?['TemDesvio'], true))",
           "solution": "OPER_OPSUL"
         }
-      },
-      "runAfter": {
-        "Cond_Notificar_Desvio_BAERI_Teams": [
-          "Succeeded",
-          "Skipped",
-          "Failed"
-        ]
       }
     }
   },

@@ -1,5 +1,21 @@
 # Changelog — `vibra-oper-opsul-blitz-sms`
 
+## [v1.7.0] — 2026-11-16
+### Alterado & Corrigido
+- **Migração do Portal Web (`opsul_blitz_sms_app.html`) para o ambiente corporativo `Petrobras Distribuidora S/A (default)` (`https://org3359db9c.crm.dynamics.com`):**
+  - Criação da solução `OPER_OPSUL` (`784fe957-dae1-f111-84ea-0022482fe438`, publisher `opsul`) e publicação do Web Resource `opsul_blitz_sms_app.html` (`7b4fe957-dae1-f111-84ea-0022482fe438`) no ambiente corporativo default, onde os colaboradores `@vibraenergia.com.br` estão licenciados e possuem papel `Basic User` (`prvReadUser`, `prvReadWebResource`, `prvReadOrganization`).
+  - Correção do bloqueio de acesso para funcionários Vibra que ocorria quando o Web Resource apontava apenas para o ambiente individual `Cristian Ferreira Carlos` (`orgd15f46d4.crm2.dynamics.com`, SKU `Developer` com apenas 63 usuários).
+  - Sincronização do Web Resource no ambiente `orgd15f46d4.crm2.dynamics.com` (`246bf32a-48d9-f111-84e8-e4fade0322c2`) para redirecionar automaticamente acessos ao endereço antigo para `https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html`.
+- **Trava Estrita de Domínio Corporativo (`@vibraenergia.com.br`):**
+  - Em `verifyCorporateSession()` e na guarda do evento `submit` de [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html), a validação passa a consultar `internalemailaddress` e `domainname` em `/api/data/v9.2/systemusers(...)`, bloqueando contas convidadas (`#EXT#`) ou de outros domínios e liberando o acesso exclusivamente para usuários `@vibraenergia.com.br`.
+- **Regras Canônicas de Transportadora e Refinamento de Match do Responsável:**
+  - Inclusão de `CANONICAL_TRANSP_RULES`, `canonicalizeTransportadora()` e `unifyTransportadorasCatalog()` em [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html) para unificação canônica e exibição das variações consolidadas no Combobox de Transportadora, além de mensagem dinâmica de alerta por base (`Blitz SSMA ${payload.base}`) no banner de confirmação.
+  - Refinamento em `lockResponsavelFromCorporateLogin()` com correspondência por primeiro/último token e fallback Fuzzy (`>= 750`) preservando o nome da sessão autenticada.
+- **Atualização e Renomeação dos Fluxos (`4a9ba077-4920-ea16-ae45-293f56eb85e3`):**
+  - [`OPER_OPSUL - Portal Web Blitz de SMS (Com Login)`](./flows/oper_opsul_portal_web_blitz_de_sms/definition.wdl.json) (`8bfaac34-48d9-f111-84e8-e4fade0322c2`): renomeado de `(Sem Login)` para `(Com Login)` e atualizado na ação `Response_Portal_HTML` para redirecionar para `https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html`.
+  - [`OPER_OPSUL - API Blitz de SMS (Com Login)`](./flows/oper_opsul_api_blitz_de_sms/definition.wdl.json) (`592191f7-47d9-f111-84e8-e4fade0322c2`): renomeado de `(Sem Login)` para `(Com Login)`, mantendo gravação na tabela `opsul_blitzsmses` e alertas no Teams.
+  - **Nota operacional:** no ambiente `Petrobras Distribuidora S/A (default)`, o usuário possui `prvCreateWebResource` sem `prvWriteWebResource`; futuras edições no HTML exigem publicar uma nova versão de Web Resource (ex.: `opsul_blitz_sms_app_v2.html`) e atualizar o redirecionamento do fluxo Portal Web.
+
 ## [v1.6.0] — 2026-11-06
 ### Adicionado & Alterado
 - **Busca Inteligente Fuzzy de Transportadora + Unificação de Variações para o Dashboard (`Power Bi - Blitz SMS`):**

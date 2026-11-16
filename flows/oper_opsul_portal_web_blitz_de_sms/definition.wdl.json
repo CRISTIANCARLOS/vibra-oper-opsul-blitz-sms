@@ -31,7 +31,7 @@
           "Content-Type": "text/html; charset=utf-8",
           "Cache-Control": "no-store, no-cache, must-revalidate"
         },
-        "body": "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8' /><meta http-equiv='refresh' content='0;url=https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html' /><title>Redirecionando para Login Corporativo Vibra...</title><script>window.location.replace('https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html');</script></head><body style='font-family:sans-serif;background:#004415;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;'><p>Redirecionando para autenticação corporativa Vibra Energia (<a href='https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html' style='color:#FEDC00;'>clique aqui</a>)...</p></body></html>"
+        "body": "<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8' /><meta http-equiv='refresh' content='0;url=https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html' /><title>Redirecionando para Login Corporativo Vibra...</title><script>window.location.replace('https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html');</script></head><body style='font-family:sans-serif;background:#004415;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;'><p>Redirecionando para autenticação corporativa Vibra Energia (<a href='https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html' style='color:#FEDC00;'>clique aqui</a>)...</p></body></html>"
       },
       "runAfter": {}
     }

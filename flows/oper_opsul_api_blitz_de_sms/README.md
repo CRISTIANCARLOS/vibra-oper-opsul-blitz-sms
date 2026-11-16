@@ -1,10 +1,11 @@
-# ⚙️ Fluxo: `OPER_OPSUL - API Blitz de SMS`
+# ⚙️ Fluxo: `OPER_OPSUL - API Blitz de SMS (Com Login)`
 
 - **Workflow ID (Dataverse):** `592191f7-47d9-f111-84e8-e4fade0322c2`
+- **Flow ID (Power Automate):** `b87fe08f-7468-d714-b802-4abe9f42cc51`
 - **Solução:** `OPER_OPSUL` (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`)
 - **Ambiente:** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3`)
 - **Estado:** `Ativo (Started)` (`statecode: 1, statuscode: 2`)
-- **Autenticação do Trigger:** `All` (invocado pelo Web Resource autenticado via SSO Vibra)
+- **Autenticação do Trigger:** `All` (invocado pelo Web Resource autenticado `@vibraenergia.com.br` no ambiente `org3359db9c.crm.dynamics.com`)
 
 ## Descrição
 Fluxo HTTP POST que recebe as submissões do formulário Blitz de SMS, cria o registro na tabela `opsul_blitzsms` (`CreateRecord`), grava as fotos opcionais de não conformidade (`opsul_foto_item1` a `opsul_foto_item5`) como binário nativo no Dataverse (`UpdateEntityFileImageFieldContent`), consulta a parametrização da base em `opsul_bases` (`opsul_alerta_teams_ativo eq true`) e, quando houver **1 ou mais desvios no checklist**, aciona o fluxo de aviso no Microsoft Teams (`OPER_OPSUL - Alerta de Desvio Blitz de SMS no Teams (BAERI)` -> grupo **`Blitz SSMA BAERI`**), retornando o protocolo único, `blitz_id` e flag `notificado_teams` via JSON com suporte a CORS.

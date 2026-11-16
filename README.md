@@ -1,18 +1,18 @@
 # 🛡️ Solução Relacional `OPER_OPSUL` — Blitz de SMS & Portal Web (Login Corporativo Vibra SSO + Alerta Teams BAERI)
 
-> **Repositório Oficial Versionado (`v1.5.0`)** — Banco de Dados Relacional `OPER_OPSUL` no Microsoft Dataverse (4 tabelas relacionais, **3.761 registros históricos** migrados, **204 bases operacionais**, **372 responsáveis** e tabela de **Usuários do Regional para SSO**) + Aplicativo Web com **Login Corporativo Individual Obrigatório Vibra Energia (Microsoft Entra ID / Dataverse SSO — Responsável bloqueado na sessão autenticada)**, Design System Vibra Energia, Busca Fuzzy, Evidência Fotográfica Nativa e **Alerta Automático de Desvios no Microsoft Teams para a unidade `BAERI` (grupo `Blitz SSMA BAERI`)**.
+> **Repositório Oficial Versionado (`v1.7.0`)** — Banco de Dados Relacional `OPER_OPSUL` no Microsoft Dataverse (4 tabelas relacionais, **3.761 registros históricos** migrados, **204 bases operacionais**, **372 responsáveis** e tabela de **Usuários do Regional para SSO**) + Aplicativo Web hospedado no ambiente corporativo default com **Login Corporativo Individual Obrigatório Vibra Energia (`@vibraenergia.com.br` via Microsoft Entra ID / Dataverse SSO — Responsável bloqueado na sessão autenticada)**, Design System Vibra Energia, Busca Fuzzy, Evidência Fotográfica Nativa e **Alerta Automático de Desvios no Microsoft Teams para a unidade `BAERI` (grupo `Blitz SSMA BAERI`)**.
 
-- **Ambiente Power Platform (Solução & Dados):** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3` — `https://orgd15f46d4.crm2.dynamics.com`)
+- **Ambiente Power Platform (Portal Web / SSO Corporativo Vibra):** `Petrobras Distribuidora S/A (default)` (`https://org3359db9c.crm.dynamics.com`) — Solução `OPER_OPSUL` (`784fe957-dae1-f111-84ea-0022482fe438`)
+- **Ambiente Power Platform (Dados & Fluxos Portal/API):** `Cristian Ferreira Carlos` (`4a9ba077-4920-ea16-ae45-293f56eb85e3` — `https://orgd15f46d4.crm2.dynamics.com`) — Solução `OPER_OPSUL` (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`)
 - **Ambiente Power Platform (Relay Microsoft Teams):** `autoBR@x - Desenvolvimento` (`898c553e-12ff-e6c6-8b11-bc7586165a03` — `https://org165415fc.crm.dynamics.com`)
-- **Solução Dataverse:** `OPER_OPSUL` (`e11a7dcc-45d9-f111-84e8-e4fade0322c2`)
-- **Publisher:** `OPER_OPSUL Vibra Energia` (prefixo `opsul_`)
+- **Publisher:** `OPER_OPSUL Vibra Energia` (prefixo `opsul`)
 - **Grupo Microsoft Teams (`BAERI`):** **`Blitz SSMA BAERI`** (`19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2`)
-- **Link Oficial do App (Exige Login Corporativo Vibra SSO):** [Abrir Aplicativo Blitz de SMS — OPER_OPSUL (SSO Vibra)](https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html)
+- **Link Oficial do App (Exige Login Corporativo `@vibraenergia.com.br`):** [Abrir Aplicativo Blitz de SMS — OPER_OPSUL (SSO Vibra)](https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html)
 - **Link de Redirecionamento Automático (`Portal Flow -> SSO Vibra`):** [Redirecionador Portal OPER_OPSUL](https://4a9ba0774920ea16ae45293f56eb85.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/22bf8a38645945cea776aadeb945e1e9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lX9gzbxvImHj0A29PSf5YqK96YoU56w9VuQSGBCsEQo)
 
 ---
 
-## 1. Arquitetura da Solução `OPER_OPSUL` (`v1.5.0`)
+## 1. Arquitetura da Solução `OPER_OPSUL` (`v1.7.0`)
 
 ```mermaid
 flowchart LR
@@ -65,9 +65,9 @@ flowchart LR
     F_TEAMS -->|"Aviso Adaptive Card"| GRP_BAERI
 ```
 
-> **Responsável Vinculado ao Login Corporativo Individual (100% Compatível com o Banco Atual):** Cada usuário faz a Blitz autenticado em seu próprio login corporativo da Vibra Energia (`@vibraenergia.com.br` via SSO no Dataverse). O campo **Nome do Responsável pela Blitz** é bloqueado (`readonly`) e preenchido automaticamente a partir da sessão autenticada (`WhoAmI` + `systemusers`), cruzando com o catálogo de 372 nomes de `opsul_responsavel` quando existente e enviando os mesmos atributos `opsul_responsavel_nome` e `opsul_responsavel_email` para `opsul_blitzsms` sem qualquer alteração no banco de dados atual.
+> **Responsável Vinculado ao Login Corporativo Individual (100% Compatível com o Banco Atual):** Cada usuário faz a Blitz autenticado em seu próprio login corporativo da Vibra Energia (`@vibraenergia.com.br` via SSO no ambiente `Petrobras Distribuidora S/A (default)` — `org3359db9c.crm.dynamics.com`). O aplicativo valida `WhoAmI` + `systemusers` (`internalemailaddress` e `domainname`), bloqueia contas convidadas (`#EXT#`) ou de outros domínios, trava o campo **Nome do Responsável pela Blitz** (`readonly`) com o usuário autenticado e envia `opsul_responsavel_nome` e `opsul_responsavel_email` para `opsul_blitzsms` sem qualquer alteração no banco de dados atual.
 >
-> **Busca Inteligente Fuzzy de Transportadora (Unificação de Variações para o Dashboard Power BI):** O campo **Transportadora** utiliza um Combobox inteligente com motor **Fuzzy (Distância de Levenshtein + remoção de sufixos societários `LTDA`, `SA`, `TRANSPORTADORA`, `TRANSPORTES`)** sobre o catálogo de **383 transportadoras canônicas** unificadas a partir de 1.367 variações históricas (ex.: `TRANSPORTADORA NICHELE LTDA` -> **`NICHELE`**, `ADEMIR TRANSPORTES` -> **`ADEMIR`**, `DALCOQUIO` -> **`DALÇOQUIO`**), mantendo o Dashboard Power BI (`Power Bi - Blitz SMS`) 100% íntegro e sem fragmentação de nomes.
+> **Busca Inteligente Fuzzy de Transportadora (Unificação de Variações para o Dashboard Power BI):** O campo **Transportadora** utiliza um Combobox inteligente com motor **Fuzzy (regras canônicas `CANONICAL_TRANSP_RULES`, Distância de Levenshtein e remoção de sufixos societários `LTDA`, `SA`, `TRANSPORTADORA`, `TRANSPORTES`)** sobre o catálogo de **383 transportadoras canônicas** unificadas a partir de 1.367 variações históricas (ex.: `TRANSPORTADORA NICHELE LTDA` -> **`NICHELE TRANSPORTES`**, `ADEMIR TRANSPORTES` -> **`ADEMIR TRANSPORTES`**, `DALCOQUIO` -> **`DALÇOQUIO`**), mantendo o Dashboard Power BI (`Power Bi - Blitz SMS`) 100% íntegro e sem fragmentação de nomes.
 >
 > **Alerta Automático de Desvios no Teams (`BAERI`):** Sempre que uma Blitz na **`BAERI`** (`opsul_alerta_teams_ativo = true`) registrar **1 ou mais desvios** no checklist (Itens 01 a 05), um card informativo (**sem botões de ação**) é publicado automaticamente no grupo **`Blitz SSMA BAERI`** do Microsoft Teams.
 
@@ -86,12 +86,14 @@ flowchart LR
 
 ## 3. Inventário de Fluxos e Recursos Web Ativos (4)
 
-| Componente | Tipo | ID no Dataverse | Autenticação / Canal | Código-Fonte |
+| Componente | Tipo | ID no Dataverse | Ambiente / Canal | Código-Fonte |
 | :--- | :--- | :--- | :---: | :--- |
-| **`opsul_blitz_sms_app.html`** | Dataverse Web Resource (HTML) | `246bf32a-48d9-f111-84e8-e4fade0322c2` | **SSO Microsoft Entra ID Vibra** (`/api/data/v9.2/WhoAmI`) | [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html) |
-| **OPER_OPSUL - Portal Web Blitz de SMS** | Solution Cloud Flow | `8bfaac34-48d9-f111-84e8-e4fade0322c2` | Redirecionador automático para o Web Resource SSO | [`flows/oper_opsul_portal_web_blitz_de_sms/`](./flows/oper_opsul_portal_web_blitz_de_sms/README.md) |
-| **OPER_OPSUL - API Blitz de SMS** | Solution Cloud Flow | `592191f7-47d9-f111-84e8-e4fade0322c2` | Endpoint POST (`CreateRecord` + Fotos + Disparo Alerta Teams) | [`flows/oper_opsul_api_blitz_de_sms/`](./flows/oper_opsul_api_blitz_de_sms/README.md) |
+| **`opsul_blitz_sms_app.html`** | Dataverse Web Resource (HTML) | `7b4fe957-dae1-f111-84ea-0022482fe438` *(Default)* / `246bf32a-48d9-f111-84e8-e4fade0322c2` *(Dev redirect)* | **Petrobras Default (`org3359db9c`) • SSO `@vibraenergia.com.br`** (`/api/data/v9.2/WhoAmI`) | [`webresources/opsul_blitz_sms_app.html`](./webresources/opsul_blitz_sms_app.html) |
+| **OPER_OPSUL - Portal Web Blitz de SMS (Com Login)** | Solution Cloud Flow (`38abac2b-332e-58e2-31ea-7e092597d2d7`) | `8bfaac34-48d9-f111-84e8-e4fade0322c2` | Redirecionador automático para `org3359db9c.crm.dynamics.com` | [`flows/oper_opsul_portal_web_blitz_de_sms/`](./flows/oper_opsul_portal_web_blitz_de_sms/README.md) |
+| **OPER_OPSUL - API Blitz de SMS (Com Login)** | Solution Cloud Flow (`b87fe08f-7468-d714-b802-4abe9f42cc51`) | `592191f7-47d9-f111-84e8-e4fade0322c2` | Endpoint POST (`CreateRecord` + Fotos + Disparo Alerta Teams) | [`flows/oper_opsul_api_blitz_de_sms/`](./flows/oper_opsul_api_blitz_de_sms/README.md) |
 | **OPER_OPSUL - Alerta de Desvio Blitz de SMS no Teams (BAERI)** | Cloud Flow (`898c553e`) | `d5c4bed7-10da-f111-84e8-000d3a8cdf8c` | `shared_teams` -> Grupo **`Blitz SSMA BAERI`** (`19:063ca6b11e714dc8b17d26e11c0ebd40@thread.v2`) | [`flows/oper_opsul_alerta_desvio_blitz_teams_baeri/`](./flows/oper_opsul_alerta_desvio_blitz_teams_baeri/README.md) |
+
+> **Nota de Publicação no Petrobras Default (`org3359db9c`):** O usuário operacional possui `prvCreateWebResource`, sem `prvWriteWebResource`. Caso seja necessário editar o HTML no futuro, deve-se criar uma nova versão de Web Resource (ex.: `opsul_blitz_sms_app_v2.html`) na solução `OPER_OPSUL` (`784fe957-dae1-f111-84ea-0022482fe438`) e atualizar o redirecionamento no fluxo `OPER_OPSUL - Portal Web Blitz de SMS (Com Login)`.
 
 ---
 

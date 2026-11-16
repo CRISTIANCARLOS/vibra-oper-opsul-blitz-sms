@@ -909,7 +909,7 @@
     <div class="auth-gate-card">
       <h2>🔒 Acesso Corporativo Vibra Energia</h2>
       <p id="authGateMessage">Verificando sua sessão autenticada no ambiente corporativo Vibra Energia (Microsoft Entra ID SSO)...</p>
-      <button type="button" class="btn-digital" id="btnAuthRedirect" style="display:none; width:100%; justify-content:center;" onclick="window.location.href='https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html'">
+      <button type="button" class="btn-digital" id="btnAuthRedirect" style="display:none; width:100%; justify-content:center;" onclick="window.location.href='https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html'">
         Entrar com Conta Corporativa Vibra
       </button>
     </div>
@@ -1465,7 +1465,7 @@
       <div class="submit-footer">
         <div>
           <strong style="font-size: 14px; color: var(--ink);">Destino: Solução Relacional <code>OPER_OPSUL</code> (Tabela <code>opsul_blitzsms</code>)</strong>
-          <p style="font-size: 12px; color: var(--mut);">Gravação direta sem necessidade de login • Sincronização automática do catálogo de Responsáveis.</p>
+          <p style="font-size: 12px; color: var(--mut);">Apenas usuários corporativos autenticados (Microsoft Entra ID) registram dados no banco • Unificação Fuzzy automática de Transportadoras e Responsáveis.</p>
         </div>
         <button type="submit" class="btn-digital" id="btnSubmit">
           <span>Registrar Blitz de SMS</span>
@@ -1707,8 +1707,19 @@
 
     function lockResponsavelFromCorporateLogin(rawDispName, email) {
       const fallbackName = rawDispName || (email ? email.split("@")[0].replace(/[._-]+/g, " ").toUpperCase() : "");
-      const matched = responsaveisList.find(r => stripAccents(r.nome) === stripAccents(fallbackName));
-      const canonicalName = matched ? matched.nome : fallbackName;
+      const normFallback = stripAccents(fallbackName);
+      const fbTokens = normFallback.split(/\s+/).filter(Boolean);
+      const matched =
+        responsaveisList.find(r => stripAccents(r.nome) === normFallback) ||
+        responsaveisList.find(r => {
+          const rTokens = stripAccents(r.nome).split(/\s+/).filter(Boolean);
+          if (fbTokens.length >= 2 && rTokens.length >= 2) {
+            return fbTokens[0] === rTokens[0] && fbTokens[fbTokens.length - 1] === rTokens[rTokens.length - 1];
+          }
+          return false;
+        }) ||
+        responsaveisList.find(r => fuzzyScore(fallbackName, r.nome) >= 750);
+      const canonicalName = rawDispName ? rawDispName.trim() : (matched ? matched.nome : fallbackName);
       const suggestedBase = matched ? matched.base : "";
 
       inpRespValue.value = canonicalName;
@@ -1741,16 +1752,92 @@
     const transpResultsList = document.getElementById("transpResultsList");
     const btnClearTransp = document.getElementById("btnClearTransp");
 
+    const CANONICAL_TRANSP_RULES = [
+      { canonical: "ADEMIR TRANSPORTES", re: /\b(ADEMIR|ADMIR|TRANSADEMIR)\b/ },
+      { canonical: "NICHELE TRANSPORTES", re: /\b(NICHELE|NICHELI|NICHELLE|MICHELE)\b/ },
+      { canonical: "TRANSPODIESEL", re: /\b(TRANSPODIESEL|TRANPODIESEL|TRASPODIESEL|TRANSPODISEL|TRASNPODIESEL)\b/ },
+      { canonical: "BUDEL TRANSPORTES", re: /\b(BUDEL|BUDELL)\b/ },
+      { canonical: "TRANSLEONE", re: /\b(TRANSLEONE|TRASLEONE|TRANS\s*LEONE|LEONE)\b/ },
+      { canonical: "GARBUIO", re: /\b(GARBUIO|GARBUO)\b/ },
+      { canonical: "TRANSLÍQUIDOS", re: /\b(TRANSLIQUIDOS|TRANSLIQUIDO|TRANS\s*LIQUIDOS|TRANS\s*LIQUIDO)\b/ },
+      { canonical: "TRANSBROTENSE", re: /\b(TRANSBROTENSE|BROTENSE)\b/ },
+      { canonical: "SOLYDA TRANSPORTES", re: /\b(SOLYDA|SOLIDA)\b/ },
+      { canonical: "HAMMES TRANSPORTES", re: /\b(HAMMES|HAMES|HAMENS)\b/ },
+      { canonical: "REDE SIM", re: /\b(REDE\s*SIM|REDESIM|SIM\s*REDE|CHARRUA|^SIM$|^SIM\s+TRANSPORTES$)\b/ },
+      { canonical: "ALUÍSIO PEREIRA", re: /\b(ALUISIO|ALUIZIO|ALOISIO)\b/ },
+      { canonical: "VELLOSO & LEAL", re: /\b(VELLOSO|VELOSO)\b/ },
+      { canonical: "PRA FRENTE BRASIL", re: /\b(PRA\s*FRENTE\s*BRASIL|PFB)\b/ },
+      { canonical: "BUFFON", re: /\b(BUFFON|BUFON)\b/ },
+      { canonical: "CAVALHADA", re: /\b(CAVALHADA)\b/ },
+      { canonical: "TRANSPANORAMA", re: /\b(TRANSPANORAMA|PANORAMA)\b/ },
+      { canonical: "RISEL", re: /\b(RISEL|RIZZEL)\b/ },
+      { canonical: "TRANSJORDANO", re: /\b(TRANSJORDANO|JORDANO)\b/ },
+      { canonical: "JORDAN TRANSPORTES", re: /\b(JORDAN|TRANSJORDAN)\b/ },
+      { canonical: "STANG", re: /\b(STANG)\b/ },
+      { canonical: "COTRIPAL", re: /\b(COTRIPAL)\b/ },
+      { canonical: "TLGA", re: /\b(TLGA)\b/ },
+      { canonical: "CAVALINHO", re: /\b(CAVALINHO)\b/ },
+      { canonical: "DALÇOQUIO", re: /\b(DALCOQUIO|DALSOQUIO)\b/ },
+      { canonical: "SANTA TERESINHA", re: /\b(SANTA\s*TERESINHA|SANTA\s*TEREZINHA|STA\s*TERESINHA|STA\s*TEREZINHA)\b/ },
+      { canonical: "GABIJU", re: /\b(GABIJU)\b/ },
+      { canonical: "COTRIMAIO", re: /\b(COTRIMAIO)\b/ },
+      { canonical: "VIA DUPLA", re: /\b(VIA\s*DUPLA|VIADUPLA)\b/ },
+      { canonical: "ARCO ÍRIS", re: /\b(ARCO\s*IRIS|ARCOIRIS)\b/ },
+      { canonical: "TRANSPORTADORA ARCO", re: /\b(ARCO)\b/ },
+      { canonical: "ZANDONÁ", re: /\b(ZANDONA|ZADONA)\b/ },
+      { canonical: "CITA TRANSPORTES", re: /\b(CITA|CITTA)\b/ },
+      { canonical: "TVF TRANSPORTES", re: /\b(TVF)\b/ },
+      { canonical: "VKL TRANSPORTES", re: /\b(VKL)\b/ },
+      { canonical: "STEFANI", re: /\b(STEFANI|ESTEFANI)\b/ },
+      { canonical: "INCENHA", re: /\b(INCENHA|INSENHA)\b/ },
+      { canonical: "SAN DONATO", re: /\b(SAN\s*DONATO|SANDONATO|SAO\s*DONATO)\b/ },
+      { canonical: "GOTARDO", re: /\b(GOTARDO|GOTTARDO)\b/ },
+      { canonical: "GUTERRES", re: /\b(GUTERRES|GUTIERREZ|GUTERRS)\b/ },
+      { canonical: "PAMPEANO DIESEL", re: /\b(PAMPEANO)\b/ },
+      { canonical: "GUEDES NETO", re: /\b(GUEDES)\b/ },
+      { canonical: "NEVOEIRO", re: /\b(NEVOEIRO)\b/ },
+      { canonical: "BWT TRANSPORTES", re: /\b(BWT)\b/ },
+      { canonical: "JCG TRANSPORTES", re: /\b(JCG)\b/ },
+      { canonical: "PETRO G", re: /\b(PETRO\s*G|PETROG)\b/ },
+      { canonical: "ROMANO TRANSPORTES", re: /\b(ROMANO)\b/ },
+      { canonical: "MG RODRIGUES", re: /\b(MG\s*RODRIGUES|M\s*G\s*RODRIGUES)\b/ },
+      { canonical: "FACCINI", re: /\b(FACCINI|FACINI)\b/ },
+      { canonical: "KÁTIA LOCATELLI", re: /\b(KATIA\s*LOCATELLI|KATIA\s*LOCATELI|LOCATELLI)\b/ },
+      { canonical: "MRA TRANSPORTES", re: /\b(MRA)\b/ },
+      { canonical: "HU TRANSPORTES", re: /\b(HU\s*TRANSPORTES|HU\s*TRANSPORTE|H\s*U)\b/ },
+      { canonical: "COOPERLÍQUIDOS", re: /\b(COOPERLIQUIDOS|COPERLIQUIDOS|COOPER\s*LIQUIDOS)\b/ },
+      { canonical: "COOPERMIL", re: /\b(COOPERMIL|COPERMIL)\b/ },
+      { canonical: "IRMÃOS GRAL", re: /\b(GRAL|IRMAOSGRAL)\b/ },
+      { canonical: "CENTENÁRIO DIESEL", re: /\b(CENTENARIO)\b/ },
+      { canonical: "COQUEIRO COMBUSTÍVEIS", re: /\b(COQUEIRO)\b/ },
+      { canonical: "SPAGIARI", re: /\b(SPAGIARI|SPAJARI|ESPAJARI)\b/ },
+      { canonical: "TRR RIGONATTO", re: /\b(RIGONATTO|RIGONATO)\b/ },
+      { canonical: "STAEVIE COMBUSTÍVEIS", re: /\b(STAEVIE|ESTAEVIE)\b/ },
+      { canonical: "VIPLOG TRANSPORTES", re: /\b(VIPLOG|VIP\s*LOG)\b/ },
+      { canonical: "TRANSBATISTA", re: /\b(TRANSBATISTA|TRANS\s*BATISTA|BATISTA)\b/ },
+    ];
+
     function cleanTranspQuery(q) {
       return stripAccents(q)
         .replace(/[^A-Z0-9\s]/g, " ")
-        .replace(/\b(TRANSPORTADORA|TRANSPORTES|TRANSPORTE|RODOVIARIO|RODOVIARIA|LOGISTICA|LTDA|SA|ME|EPP|EIRELI)\b/g, " ")
+        .replace(/\b(TRANSPORTADORA|TRANSPORTES|TRANSPORTE|RODOVIARIO|RODOVIARIA|RODOVIARIOS|LOGISTICA|LOGISTICAS|COMERCIO|COMBUSTIVEIS|COMBUSTIVEL|DERIVADOS|PETROLEO|POSTOS|POSTO|REDE|TRR|CIA|LTDA|LTD|SA|S\s*A|ME|EPP|EIRELI|EIR|DE|DO|DA|DOS|DAS|E)\b/g, " ")
         .replace(/\s+/g, " ")
         .trim();
     }
 
+    function canonicalizeTransportadora(raw) {
+      const clean = stripAccents(raw).replace(/[^A-Z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+      if (!clean) return "";
+      for (const r of CANONICAL_TRANSP_RULES) {
+        if (r.re.test(clean)) return r.canonical;
+      }
+      return (raw || "").trim().replace(/\s+/g, " ").toUpperCase();
+    }
+
     function transpFuzzyScore(query, item) {
       if (!query || !query.trim()) return 100;
+      const canonQ = canonicalizeTransportadora(query);
+      if (canonQ && stripAccents(canonQ) === stripAccents(item.nome)) return 995;
       const rawSc = fuzzyScore(query, item.nome);
       const coreQ = cleanTranspQuery(query);
       const coreT = cleanTranspQuery(item.nome);
@@ -1764,47 +1851,82 @@
       return best;
     }
 
+    function unifyTransportadorasCatalog() {
+      const map = new Map();
+      for (const item of transportadorasList) {
+        if (!item || !item.nome) continue;
+        const canon = canonicalizeTransportadora(item.nome);
+        if (!canon || /^\d+$/.test(canon)) continue;
+        const key = stripAccents(canon);
+        const existing = map.get(key);
+        const aliasSet = new Set(existing ? existing.aliases : []);
+        if (stripAccents(item.nome) !== key) aliasSet.add(item.nome.toUpperCase());
+        if (Array.isArray(item.aliases)) {
+          for (const a of item.aliases) {
+            if (a && stripAccents(a) !== key) aliasSet.add(a.toUpperCase());
+          }
+        }
+        if (existing) {
+          existing.count += (item.count || 1);
+          existing.aliases = Array.from(aliasSet);
+        } else {
+          map.set(key, {
+            nome: canon,
+            count: item.count || 1,
+            aliases: Array.from(aliasSet)
+          });
+        }
+      }
+      transportadorasList = Array.from(map.values()).sort((a, b) => b.count - a.count || a.nome.localeCompare(b.nome));
+    }
+
     function loadLocalTransportadoras() {
       try {
         const customList = JSON.parse(localStorage.getItem("opsul_custom_transportadoras") || "[]");
-        const existingKeys = new Set(transportadorasList.map(t => stripAccents(t.nome)));
         for (const c of customList) {
-          if (c && c.nome && !existingKeys.has(stripAccents(c.nome))) {
+          if (c && c.nome) {
             transportadorasList.unshift({ nome: c.nome.toUpperCase(), count: c.count || 1, aliases: [] });
-            existingKeys.add(stripAccents(c.nome));
           }
         }
       } catch (_) {}
+      unifyTransportadorasCatalog();
     }
 
     window.saveNewTransportadoraToList = function(rawName) {
       const clean = (rawName || "").trim().replace(/\s+/g, " ").toUpperCase();
-      if (!clean) return;
-      // Verifica se já existe correspondência exata ou por núcleo Fuzzy >= 850
+      if (!clean) return "";
+      const canonical = canonicalizeTransportadora(clean) || clean;
+      // Verifica se já existe correspondência canônica ou por núcleo Fuzzy >= 820
       let bestMatch = null;
       let bestSc = 0;
       for (const t of transportadorasList) {
+        if (stripAccents(t.nome) === stripAccents(canonical)) {
+          selectTransportadora(t.nome);
+          return t.nome;
+        }
         const sc = transpFuzzyScore(clean, t);
         if (sc > bestSc) {
           bestSc = sc;
           bestMatch = t;
         }
       }
-      if (bestMatch && bestSc >= 850) {
+      if (bestMatch && bestSc >= 820) {
         selectTransportadora(bestMatch.nome);
-        return;
+        return bestMatch.nome;
       }
-      if (!transportadorasList.some(t => stripAccents(t.nome) === stripAccents(clean))) {
-        transportadorasList.unshift({ nome: clean, count: 1, aliases: [] });
+      if (!transportadorasList.some(t => stripAccents(t.nome) === stripAccents(canonical))) {
+        const aliases = stripAccents(clean) !== stripAccents(canonical) ? [clean] : [];
+        transportadorasList.unshift({ nome: canonical, count: 1, aliases });
         try {
           const customList = JSON.parse(localStorage.getItem("opsul_custom_transportadoras") || "[]");
-          if (!customList.some(x => stripAccents(x.nome) === stripAccents(clean))) {
-            customList.unshift({ nome: clean, count: 1 });
+          if (!customList.some(x => stripAccents(x.nome) === stripAccents(canonical))) {
+            customList.unshift({ nome: canonical, count: 1 });
             localStorage.setItem("opsul_custom_transportadoras", JSON.stringify(customList));
           }
         } catch (_) {}
       }
-      selectTransportadora(clean);
+      selectTransportadora(canonical);
+      return canonical;
     };
 
     function renderTranspDropdown() {
@@ -1817,15 +1939,24 @@
       scored.sort((a, b) => b.score - a.score || b.count - a.count || a.nome.localeCompare(b.nome));
 
       let html = scored.slice(0, 50).map(item => {
-        const matchType = item.score >= 700 ? "Exato / Variação" : (item.score >= 500 ? "Subsequência" : "Aproximação Fuzzy");
+        const aliasCount = Array.isArray(item.aliases) ? item.aliases.length : 0;
+        const matchType = item.score >= 700
+          ? (aliasCount > 0 ? `Canônica (${aliasCount + 1} var.)` : "Exato / Canônica")
+          : (item.score >= 500 ? "Subsequência" : "Aproximação Fuzzy");
         const safeNome = item.nome.replace(/'/g, "\\'");
+        const aliasPreview = aliasCount > 0
+          ? `<div style="font-size:10px; color:var(--mut); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:340px;">Unifica: ${item.aliases.slice(0, 3).join(" • ")}${aliasCount > 3 ? ` (+${aliasCount - 3})` : ""}</div>`
+          : "";
         return `
           <div class="fuzzy-item" onclick="selectTransportadora('${safeNome}')">
-            <div class="fuzzy-item-main">
-              <strong style="font-size:13px; color:var(--ink);">${item.nome}</strong>
-              <span class="fuzzy-badge" style="background:var(--vg-secondary);">${item.count} Blitz</span>
+            <div class="fuzzy-item-main" style="flex-direction:column; align-items:flex-start; gap:2px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <strong style="font-size:13px; color:var(--ink);">${item.nome}</strong>
+                <span class="fuzzy-badge" style="background:var(--vg-secondary);">${item.count} Blitz</span>
+              </div>
+              ${aliasPreview}
             </div>
-            <span class="fuzzy-score">${q ? matchType : "Histórico"}</span>
+            <span class="fuzzy-score">${q ? matchType : (aliasCount > 0 ? `${aliasCount + 1} variações` : "Histórico")}</span>
           </div>
         `;
       }).join("");
@@ -2030,6 +2161,10 @@
     // === SUBMISSÃO SEM LOGIN PARA O BANCO RELACIONAL OPER_OPSUL ===
     document.getElementById("blitzForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!currentAuthUser.email || !currentAuthUser.email.endsWith("@vibraenergia.com.br")) {
+        alert("Sessão corporativa inválida. É obrigatório autenticar com uma conta @vibraenergia.com.br.");
+        return;
+      }
       if (!validateForm()) {
         const firstErr = document.querySelector(".error-msg.visible");
         if (firstErr) firstErr.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -2094,7 +2229,7 @@
 
         const banner = document.getElementById("successBanner");
         const protoTxt = apiRes.protocolo ? `Protocolo: ${apiRes.protocolo} | ` : "";
-        const teamsTxt = apiRes.notificado_teams ? ` | Alerta enviado ao grupo Teams (Blitz SSMA BAERI)` : "";
+        const teamsTxt = apiRes.notificado_teams ? ` | Alerta enviado ao grupo Teams (Blitz SSMA ${payload.base})` : "";
         document.getElementById("successDetails").textContent =
           `${protoTxt}Base: ${payload.base} | Placa CT: ${payload.placa_ct} | Transportadora: ${payload.transportadora} | Responsável: ${payload.responsavel_nome} (${currentAuthUser.email || 'SSO Vibra'}) | Fotos salvas no Dataverse: ${totalPhotos}${teamsTxt}`;
         banner.classList.add("visible");
@@ -2125,7 +2260,7 @@
     };
 
     // === AUTENTICAÇÃO CORPORATIVA OBRIGATÓRIA (VIBRA ENTRA ID / DATAVERSE SSO) ===
-    const OFFICIAL_SSO_URL = "https://orgd15f46d4.crm2.dynamics.com/WebResources/opsul_blitz_sms_app.html";
+    const OFFICIAL_SSO_URL = "https://org3359db9c.crm.dynamics.com/WebResources/opsul_blitz_sms_app.html";
     let currentAuthUser = { userId: "", name: "", email: "", aadObjectId: "" };
 
     function formatDisplayName(rawName) {
@@ -2144,7 +2279,7 @@
       const btnRedirect = document.getElementById("btnAuthRedirect");
 
       // Se não estiver no domínio autenticado do Dataverse da Vibra, redireciona para forçar o login SSO Microsoft Entra ID
-      if (window.location.hostname.toLowerCase() !== "orgd15f46d4.crm2.dynamics.com") {
+      if (window.location.hostname.toLowerCase() !== "org3359db9c.crm.dynamics.com") {
         msgEl.textContent = "Redirecionando para o login corporativo Vibra Energia (Microsoft Entra ID SSO)...";
         btnRedirect.style.display = "inline-flex";
         window.location.replace(OFFICIAL_SSO_URL);
@@ -2162,15 +2297,30 @@
         const userId = whoData.UserId;
         if (!userId) throw new Error("UserId ausente na sessão");
 
-        const userResp = await fetch(`/api/data/v9.2/systemusers(${userId})?$select=fullname,internalemailaddress,azureactivedirectoryobjectid`, {
+        const userResp = await fetch(`/api/data/v9.2/systemusers(${userId})?$select=fullname,internalemailaddress,domainname,azureactivedirectoryobjectid`, {
           method: "GET",
           credentials: "include",
           headers: { "Accept": "application/json" }
         });
         if (!userResp.ok) throw new Error(`Falha ao validar usuário corporativo (HTTP ${userResp.status})`);
         const userData = await userResp.json();
-        const email = (userData.internalemailaddress || "").trim().toLowerCase();
+        const internalEmail = (userData.internalemailaddress || "").trim().toLowerCase();
+        const domainName = (userData.domainname || "").trim().toLowerCase();
+        const isVibraDomain =
+          !domainName.includes("#ext#") &&
+          (internalEmail.endsWith("@vibraenergia.com.br") || domainName.endsWith("@vibraenergia.com.br"));
+        const email = internalEmail.endsWith("@vibraenergia.com.br")
+          ? internalEmail
+          : (domainName.endsWith("@vibraenergia.com.br") ? domainName : (internalEmail || domainName));
         const dispName = formatDisplayName(userData.fullname || "");
+
+        if (!isVibraDomain) {
+          document.getElementById("authBadgePill").textContent = "🚫 ACESSO RESTRITO (@vibraenergia.com.br)";
+          msgEl.textContent = `Acesso restrito a colaboradores da Vibra Energia (@vibraenergia.com.br). A conta atual (${email || "não identificada"}) não está autorizada. Saia desta conta ou abra em uma janela anônima com seu e-mail @vibraenergia.com.br.`;
+          btnRedirect.style.display = "none";
+          overlay.style.display = "flex";
+          return false;
+        }
 
         currentAuthUser = {
           userId: userId,
